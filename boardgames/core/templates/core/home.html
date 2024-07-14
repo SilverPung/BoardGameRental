@@ -1,1 +1,33 @@
 {% extends 'core/base.html' %}
+{% block title %}Strona główna{% endblock %}
+
+
+{% block sidebar %}
+    
+{% endblock sidebar %}
+    
+
+
+
+
+{% block content %}
+
+
+    {% if events != 0 %}
+        <div>
+            <div class="flex mx-10 mt-10  rounded-xl justify-center bg-slate-200 flex-col items-center">
+                <h1 class="text-3xl font-bold my-3 mt-5">Edytuj Turniej</h1>
+            </div>
+            <div class="flex flex-col justify-center">
+                {% for event in events %}
+                    <a href="#" class="flex mx-20 -mt-1  rounded-xl justify-center bg-slate-200 flex-col items-center border-2 border-gray-700 hover:bg-gray-300">
+                        <h1 class="text-2xl font-bold my-3 mt-5">{{ event.title|capfirst }}</h1>
+                        <h1 class="text-lg font-bold my-3 mt-5">Data stworzenia: {{ event.date}}</h1>
+
+                    </a>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
+
