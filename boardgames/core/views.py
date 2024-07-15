@@ -20,7 +20,6 @@ def home(request):
     return render(request, 'core/home.html', {'events': events, 'form': form})
 
 @login_required
-
 def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
     games = Game.objects.filter(event=event)
@@ -34,6 +33,6 @@ def event_detail(request, event_id):
                 Q(title__icontains=query) | Q(barcode__icontains=query),
                 event=event  # Ensure to also filter by event
             )
-    top_games = games[:5]
-    return render(request, 'core/event_detail.html', {'event': event, 'games': games, 'form': form, 'top_games': top_games})
+    top_games = games.order_by('title')[:5]
+    return render(request, 'core/event_detail.html', {'event': event, 'form': form, 'top_games': top_games})
 
