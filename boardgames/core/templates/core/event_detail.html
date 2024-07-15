@@ -1,1 +1,51 @@
 {% extends 'core/base.html' %}
+{% block title %}Strona główna{% endblock %}
+
+
+{% block sidebar %}
+    
+{% endblock sidebar %}
+    
+
+
+
+
+{% block content %}
+
+
+
+    <div class="flex mx-20 mt-10  rounded-xl justify-center bg-slate-200 flex-col items-center">
+        <div>
+            <h1 class="text-3xl font-bold my-3 mt-5">{{ event.title|capfirst }}</h1>
+        </div>
+    </div>
+    
+    <form action="" method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
+        {% csrf_token %}
+        <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <span class="w-3/4">{{form.query}}</span>
+            <span><button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-full">Wyszukaj</button></span>
+        </div>
+    
+            
+    </form>
+    <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
+        {% for game in top_games %}
+            <a href="" class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                <span class="text-2xl">{{game.title|capfirst}}</span>
+                <span>Ilość sztuk: {{game.accessible}}/{{game.quantity}}</span>
+            </a>
+        {% endfor %}
+    </div>
+    
+    
+    <div class="fixed bottom-[80px] right-3 mb-4 mr-4">
+        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
+            Dodaj Grę
+        </a>
+    </div>
+        
+
+
+    
+{% endblock %}

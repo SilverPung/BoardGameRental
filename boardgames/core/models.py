@@ -1,3 +1,4 @@
+from typing import Iterable
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
@@ -38,10 +39,14 @@ class Game(models.Model):
     description = models.TextField(null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='game_images', null=True, blank=True)
+    accessible = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
     bgg_url = models.URLField(null=True, blank=True)
     
-
+    def save(self, *args, **kwargs):
+        if not self.pk:  # Check if the object is new
+            self.accessible = self.quantity  # Set accessible to quantity before saving
+        super(Game, self).save(*args, **kwargs)  # Call the "real" save() method.
 
     def __str__(self):
         return self.title
