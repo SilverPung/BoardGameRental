@@ -41,9 +41,9 @@ class Game(models.Model):
     image = models.ImageField(upload_to='game_images', null=True, blank=True)
     accessible = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
-    bgg_url = models.URLField(null=True, blank=True)
     
-    def save(self, *args, **kwargs):
+    def save(self, event_id,*args, **kwargs):
+        self.event = Event.objects.get(id=event_id)
         if not self.pk:  # Check if the object is new
             self.accessible = self.quantity  # Set accessible to quantity before saving
         super(Game, self).save(*args, **kwargs)  # Call the "real" save() method.
