@@ -1,9 +1,7 @@
 from django.shortcuts import render, redirect
-from django.urls import reverse
 from .models import Event, Game
-from .forms import EventForm, LoginForm, SignupForm, SearchForm
+from .forms import EventForm, SearchForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
 from django.db.models import Q  # Import Q
 
 @login_required
@@ -19,7 +17,6 @@ def home(request):
     
     return render(request, 'core/home.html', {'events': events, 'form': form})
 
-@login_required
 @login_required
 def event_detail(request, event_id):
     action = request.GET.get('action')
@@ -46,4 +43,15 @@ def event_detail(request, event_id):
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
     max_iterator = games.count() // 5
-    return render(request, 'core/event_detail.html', {'event': event, 'form': form, 'top_games': top_games, 'iterator': iterator, 'max_iterator': max_iterator})
+    return render(request, 'core/event_detail.html', {'event': event, 'form': form,
+                                                      'top_games': top_games, 
+                                                      'iterator': iterator, 
+                                                      'max_iterator': max_iterator})
+
+
+@login_required
+def logout(request):
+    return render(request, 'core/logout.html')# todo: implement logout view
+
+
+

@@ -29,6 +29,7 @@
     
             
     </form>
+
     <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
         {% for game in top_games %}
             <a href="" class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
@@ -37,6 +38,7 @@
             </a>
         {% endfor %}
     </div>
+
     <form method="get" action="{% url 'core:event_detail' event.id %}" class="flex justify-center  mt-2 mx-72"">
         <input name="iterator" type="hidden" value="{{ iterator }}">
         
@@ -50,7 +52,7 @@
     </form>
     
     <div class="fixed bottom-[80px] right-3 mb-4 mr-4">
-        <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
+        <a href="{% url 'games:add_game' event.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
             Dodaj Grę
         </a>
     </div>
