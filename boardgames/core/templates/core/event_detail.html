@@ -37,12 +37,17 @@
             </a>
         {% endfor %}
     </div>
-    <div>
-        <span><--</span>
-        <span>1</span>
-        <span>2</span>
-        <span>--></span>
-    </div>
+    <form method="get" action="{% url 'core:event_detail' event.id %}" class="flex justify-center  mt-2 mx-72"">
+        <input name="iterator" type="hidden" value="{{ iterator }}">
+        
+        {% if iterator > 0 %}
+            <button type="submit" name="action" value="decrement" class="mt-2 px-8 py-4 bg-red-500 text-white rounded-xl inline-block"><--</button>
+        {% endif %}
+        <h1 class="mt-2 px-8 py-4 bg-gray-500 text-white rounded-xl inline-block">{{iterator}}</h1>  
+        {% if iterator < max_iterator %}
+            <button type="submit" name="action" value="increment" class="mt-2 px-8 py-4 bg-green-500 text-white rounded-xl inline-block">--></button>
+        {% endif %}
+    </form>
     
     <div class="fixed bottom-[80px] right-3 mb-4 mr-4">
         <a href="#" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
