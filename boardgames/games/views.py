@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import GameForm, RentalForm
-from core.models import Game
+from core.models import Game, Event
 # Create your views here.
 
 
@@ -9,8 +9,12 @@ def add_game(request, event_id):
     if request.method == 'POST':
         form = GameForm(request.POST)
         if form.is_valid():
-            form.save(event_id = event_id) 
+            game=form.save(commit=False)
+            game.event=Event.objects.get(id=event_id)
+            game.save()
             return redirect('core:event_detail',event_id)
+        else:
+            print(form.errors)
     else:
         form = GameForm()
     return render(request, 'games/add_game.html', {'form': form})
@@ -26,7 +30,7 @@ def edit_game(request, game_id):
             if rental_form.is_valid():
                 game.add_renter(rental_form.cleaned_data['barcode'])
                 game.accessible -= 1
-                game.save(event_id=game.event.id)
+                game.save()
                 return redirect('core:event_detail',game.event.id)
         elif form_type == 'edit_game':
             form = GameForm(request.POST, instance=game)
