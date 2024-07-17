@@ -41,6 +41,7 @@ class Game(models.Model):
     image = models.ImageField(upload_to='game_images', null=True, blank=True)
     accessible = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
+    list_of_renters = models.ManyToManyField('Renter', related_name='rented_games')
     
     def save(self, event_id,*args, **kwargs):
         self.event = Event.objects.get(id=event_id)
@@ -48,5 +49,25 @@ class Game(models.Model):
             self.accessible = self.quantity  # Set accessible to quantity before saving
         super(Game, self).save(*args, **kwargs)  # Call the "real" save() method.
 
+    def add_renter(self, barcode):
+        renter = Renter.objects.get_or_create(barcode=barcode)[0]
+
+        if not self.list_of_renters.filter(id=renter.id).exists():
+                self.list_of_renters.add(renter)
+                self.save(event_id=self.event.id)
+        
     def __str__(self):
         return self.title
+    
+    
+class Renter(models.Model):
+    barcode = models.CharField(max_length=20)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    list_of_games = models.ManyToManyField(Game, related_name='rented_games',default=None, blank=True)
+
+
+    def save(self, event_id,*args, **kwargs):
+        self.event = Event.objects.get(id=event_id)
+        super(Renter, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.barcode
