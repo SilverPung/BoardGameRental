@@ -13,4 +13,4 @@ validation if user has allready rented game and if is this game (in case of hadl
 
 add:
 pop if to delete renter
-comments for clarity fo code
+comments for clarity of code

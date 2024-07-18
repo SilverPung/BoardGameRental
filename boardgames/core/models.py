@@ -69,6 +69,7 @@ class Renter(models.Model):
     barcode = models.CharField(max_length=20)
     event = models.ForeignKey(Event, on_delete=models.CASCADE,default=None, blank=True,null=True)
     list_of_games = models.ManyToManyField(Game, related_name='rented_games',default=None, blank=True)
+    how_many_games = models.IntegerField(default=0)
 
     def __str__(self):
         return self.barcode
