@@ -21,10 +21,9 @@ def add_game(request, event_id):
 
 def edit_game(request, game_id):
     game = Game.objects.get(id=game_id)
-    # Assuming game is defined earlier in the view
-    form = GameForm(instance=game)  # Initialize outside of POST block for GET requests
-    rental_form = RentalForm()  # Initialize outside of POST block for GET requests
-    list_of_renters = game.list_of_renters.all()  # Assuming this is how you get the list of renters
+    form = GameForm(instance=game)  
+    rental_form = RentalForm()  
+    list_of_renters = game.list_of_renters.all()  
 
     if request.method == 'POST':
         form_type = request.POST.get('form_type', None)
@@ -47,7 +46,7 @@ def edit_game(request, game_id):
                 form.save()
                 return redirect('core:event_detail', game.event.id)
             else:
-                print(form.errors)  # Corrected to form.errors
+                print(form.errors)
         if 'renter_id' in request.POST:
             renter_id = request.POST.get('renter_id', None)
             renter = game.list_of_renters.get(id=renter_id)

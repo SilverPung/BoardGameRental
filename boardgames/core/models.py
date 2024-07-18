@@ -44,9 +44,9 @@ class Game(models.Model):
     list_of_renters = models.ManyToManyField('Renter', related_name='rented_games',default=None, blank=True)
     
     def save(self,*args, **kwargs):
-        if not self.pk:  # Check if the object is new
-            self.accessible = self.quantity  # Set accessible to quantity before saving
-        super(Game, self).save(*args, **kwargs)  # Call the "real" save() method.
+        if not self.pk:  
+            self.accessible = self.quantity  
+        super(Game, self).save(*args, **kwargs)  
 
     def add_renter(self, barcode):
         if renter := Renter.objects.filter(barcode=barcode).first():

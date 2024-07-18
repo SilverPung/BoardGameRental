@@ -17,11 +17,11 @@ class EventForm(forms.ModelForm):
 
 
     def save(self, commit=True,user=None):
-        # Save the form instance but don't commit to the database yet
+
         event_instance = super(EventForm, self).save(commit=False)
         
         if commit:
-            event_instance.save()  # Save the event instance to the database
+            event_instance.save()  
             if self.cleaned_data.get('add_default_users'):
  
                 event_instance.add_default_users()
