@@ -34,6 +34,27 @@
         </form>
     </div>
     
+    {% if list_of_renters %}   
+        <div class="flex flex-col justify-center bg-slate-200 my-4 mb-8 mx-72">
+            <h1 class="text-3xl text-center mt-4">Wypożyczenia:</h1>
+            <div class="flex flex-col justify-center bg-slate-200 mt-10 mx-48 rounded-md">
+                {% for renter in list_of_renters %}
+                <div class="flex justify-between items-center py-4 mx-5 border-b-2 border-gray-400" >
+                    <span class="text-xl">{{ renter.barcode}}</span> <!-- Assuming 'renter' has a 'name' attribute -->
+                    <!-- Delete button form -->
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="renter_id" value="{{ renter.id }}"> <!-- Assuming 'renter' has an 'id' attribute -->
+                        <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            Delete
+                        </button>
+                    </form>
+                </div>
+            {% endfor %}
+                </div>
+        </div>
+    {% endif %}
+    
     <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
         <h1 class="text-3xl text-center mt-4">Edytuj grę</h1>
         <form method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-48 rounded-md">

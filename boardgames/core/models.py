@@ -49,11 +49,17 @@ class Game(models.Model):
         super(Game, self).save(*args, **kwargs)  # Call the "real" save() method.
 
     def add_renter(self, barcode):
-        renter = Renter.objects.get_or_create(barcode=barcode)[0]
-
-        if not self.list_of_renters.filter(id=renter.id).exists():
+        if renter := Renter.objects.filter(barcode=barcode).first():
+            if not self.list_of_renters.filter(id=renter.id).exists():
                 self.list_of_renters.add(renter)
-                self.save(event_id=self.event.id)
+                self.save()
+        else:
+            renter = Renter(barcode=barcode)
+            renter.save()
+            renter.event = self.event
+            renter.save()
+            self.list_of_renters.add(renter)
+            self.save()
         
     def __str__(self):
         return self.title
@@ -61,12 +67,8 @@ class Game(models.Model):
     
 class Renter(models.Model):
     barcode = models.CharField(max_length=20)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,default=None, blank=True,null=True)
     list_of_games = models.ManyToManyField(Game, related_name='rented_games',default=None, blank=True)
 
-
-    def save(self, event_id,*args, **kwargs):
-        self.event = Event.objects.get(id=event_id)
-        super(Renter, self).save(*args, **kwargs)
     def __str__(self):
         return self.barcode
