@@ -31,9 +31,13 @@ def edit_game(request, game_id):
         if form_type == 'rental':
             rental_form = RentalForm(request.POST)
             if rental_form.is_valid():
-                game.add_renter(rental_form.cleaned_data['barcode'])
-                game.accessible -= 1
-                game.save()
+                renters_barcode=rental_form.cleaned_data['barcode']
+                if renters_barcode in list_of_renters.values_list('barcode', flat=True):
+                    pass
+                else:
+                    game.add_renter(renter)
+                    game.accessible -= 1
+                    game.save()
                 return redirect('core:event_detail', game.event.id)
             else:
                 print(rental_form.errors)
