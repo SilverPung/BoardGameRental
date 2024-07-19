@@ -61,7 +61,7 @@
     
     <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
         <h1 class="text-3xl text-center mt-4">Edytuj grę</h1>
-        <form method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-48 rounded-md">
+        <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
             <input type="hidden" name="form_type" value="edit_game" />
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >

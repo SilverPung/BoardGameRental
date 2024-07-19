@@ -2,13 +2,14 @@ from django.shortcuts import render, redirect
 from .forms import GameForm, RentalForm, RatingForm
 from core.models import Game, Event, Renter
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 LIMIT_OF_RENTED_GAMES = 2 #limit of games that can be rented by one user
-
+@login_required
 def add_game(request, event_id):
     form = GameForm()
     if request.method == 'POST':
-        form = GameForm(request.POST)
+        form = GameForm(request.POST, request.FILES)
         if form.is_valid():
             game=form.save(commit=False)
             game.event=Event.objects.get(id=event_id)
@@ -20,6 +21,8 @@ def add_game(request, event_id):
         form = GameForm()
     return render(request, 'games/add_game.html', {'form': form})
 
+
+@login_required
 def edit_game(request, game_id):
     game = Game.objects.get(id=game_id)
     form = GameForm(instance=game)  
@@ -55,7 +58,7 @@ def edit_game(request, game_id):
                 print(rental_form.errors)
 
         elif form_type == 'edit_game':  # editing game
-            form = GameForm(request.POST, instance=game)
+            form = GameForm(request.POST,request.FILES, instance=game)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Gra została zaktualizowana.')

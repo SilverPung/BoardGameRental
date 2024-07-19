@@ -38,7 +38,7 @@ class Game(models.Model):
     distributor = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE,default=None, blank=True,null=True)
-    image = models.ImageField(upload_to='game_images', null=True, blank=True)
+    image = models.ImageField(upload_to='images/', null=True, blank=True)
     accessible = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
     list_of_renters = models.ManyToManyField('Renter', related_name='rented_games',default=None, blank=True)
