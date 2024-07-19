@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import GameForm, RentalForm
+from .forms import GameForm, RentalForm, RatingForm
 from core.models import Game, Event, Renter
 from django.contrib import messages
 # Create your views here.
@@ -24,6 +24,7 @@ def edit_game(request, game_id):
     game = Game.objects.get(id=game_id)
     form = GameForm(instance=game)  
     rental_form = RentalForm()  
+    rating_form = RatingForm()
     list_of_renters = game.list_of_renters.all()  
     if request.method == 'POST':
         form_type = request.POST.get('form_type', None)
@@ -70,7 +71,13 @@ def edit_game(request, game_id):
             game.list_of_renters.remove(renter)
             game.accessible += 1
             game.save()
+            rating=RatingForm(request.POST)
+            if rating.is_valid() and int(rating.cleaned_data['rating'])>0:
+                rating=rating.cleaned_data['rating']
+                game.avg_rating=(game.avg_rating*game.rating_count+int(rating))/(game.rating_count+1)
+                game.rating_count+=1
+                game.save()
             messages.success(request, 'Renter was successfully removed.')
             return redirect('core:event_detail', game.event.id)
-
-    return render(request, 'games/edit_game.html', {'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters})
+    context={'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters, 'rating_form': rating_form}
+    return render(request, 'games/edit_game.html',context)

@@ -23,3 +23,7 @@ class BggForm(forms.Form):
 
 class RentalForm(forms.Form):
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy wypożyczającego'}))
+
+class RatingForm(forms.Form):
+    RATING_CHOICES = [(i, str(i)) for i in range(11)]
+    rating = forms.ChoiceField(choices=RATING_CHOICES, widget=forms.Select(attrs={'class': atributes, 'placeholder': 'Ocena'}))  

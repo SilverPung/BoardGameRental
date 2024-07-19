@@ -42,6 +42,8 @@ class Game(models.Model):
     accessible = models.IntegerField(null=True, blank=True)
     quantity = models.IntegerField()
     list_of_renters = models.ManyToManyField('Renter', related_name='rented_games',default=None, blank=True)
+    avg_rating = models.FloatField(default=0)
+    rating_count = models.IntegerField(default=0)
     
     def save(self,*args, **kwargs):
         if not self.pk:  

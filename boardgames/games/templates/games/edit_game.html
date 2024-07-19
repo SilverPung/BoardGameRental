@@ -42,17 +42,18 @@
             <h1 class="text-3xl text-center mt-4">Wypożyczenia:</h1>
             <div class="flex flex-col justify-center bg-slate-200 mt-10 mx-48 rounded-md">
                 {% for renter in list_of_renters %}
-                <div class="flex justify-between items-center py-4 mx-5 border-b-2 border-gray-400" >
-                    <span class="text-xl">Wypożyczający:</span>
-                    <span class="text-2xl"> {{ renter.barcode}}</span> 
-                    <form method="post">
+                    
+                    <form method="post" class="flex justify-between items-center py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Wypożyczający:</span>
+                        <span class="text-2xl"> {{ renter.barcode}}</span> 
                         {% csrf_token %}
                         <input type="hidden" name="renter_id" value="{{ renter.id }}">
+                        <span class="text-xl">{{rating_form.rating}}</span>
                         <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                             Oddaj
                         </button>
                     </form>
-                </div>
+
             {% endfor %}
                 </div>
         </div>
