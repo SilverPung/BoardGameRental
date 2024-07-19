@@ -39,7 +39,7 @@ def edit_game(request, game_id):
                 except Renter.DoesNotExist:
                     can_be_rented = False
                 if renters_barcode in list_of_renters.values_list('barcode', flat=True) or can_be_rented:
-                    messages.error(request, 'Renter has reached the limit of rented games or has allready rented this game.')
+                    messages.error(request, 'Gra jest już wypożyczona lub osoba wypożyczająca ma już maksymalną ilość gier.')
                 else:
                     game.add_renter(renters_barcode)
                     game.accessible -= 1
@@ -47,7 +47,7 @@ def edit_game(request, game_id):
                     renter = Renter.objects.get(barcode=renters_barcode)
                     renter.how_many_games+=1
                     renter.save()
-                    messages.success(request, 'Renter was successfully added.')
+                    messages.success(request, 'Gra została wypożyczona.')
                 
                 return redirect('core:event_detail', game.event.id)
             
@@ -58,7 +58,7 @@ def edit_game(request, game_id):
             form = GameForm(request.POST, instance=game)
             if form.is_valid():
                 form.save()
-                messages.success(request, 'Game was successfully edited.')
+                messages.success(request, 'Gra została zaktualizowana.')
                 return redirect('core:event_detail', game.event.id)
             else:
                 print(form.errors)
@@ -77,7 +77,7 @@ def edit_game(request, game_id):
                 game.avg_rating=(game.avg_rating*game.rating_count+int(rating))/(game.rating_count+1)
                 game.rating_count+=1
                 game.save()
-            messages.success(request, 'Renter was successfully removed.')
+            messages.success(request, 'Gra została zwrócona.')
             return redirect('core:event_detail', game.event.id)
     context={'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters, 'rating_form': rating_form}
     return render(request, 'games/edit_game.html',context)

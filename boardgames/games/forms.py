@@ -6,7 +6,7 @@ atributes = 'form-control rounded-xl py-3 w-full bg-gray-300'
 class GameForm(forms.ModelForm):
     class Meta:
         model = Game
-        fields = ['title', 'barcode', 'distributor', 'description','event' ,'quantity', 'image','accessible']
+        fields = ['title', 'barcode', 'distributor', 'description','event' ,'quantity', 'image','accessible','top']
 
     title = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Tytuł'}))
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy'}))
@@ -16,6 +16,7 @@ class GameForm(forms.ModelForm):
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Ilość sztuk'}),initial=1,min_value=1)
     accessible = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Dostępne sztuki'}),initial=1,min_value=1,required=False)
     image = forms.ImageField(widget=forms.FileInput(attrs={ 'placeholder': 'Zdjęcie'}),required=False)
+    top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),required=False)
 
 class BggForm(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}))
