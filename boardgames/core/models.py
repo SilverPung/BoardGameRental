@@ -2,6 +2,7 @@ from typing import Iterable
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 # Create your models here.
 
 
@@ -33,7 +34,7 @@ class Event(models.Model):
 
 class Game(models.Model):
 
-    barcode = models.CharField(max_length=20)
+    barcode = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=100)
     distributor = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
@@ -63,7 +64,7 @@ class Game(models.Model):
             renter.save()
             self.list_of_renters.add(renter)
             self.save()
-        
+    
     def __str__(self):
         return self.title
     

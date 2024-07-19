@@ -17,6 +17,7 @@ def add_game(request, event_id):
             return redirect('core:event_detail',event_id)
         else:
             print(form.errors)
+            messages.error(request, form.errors)
     else:
         form = GameForm()
     return render(request, 'games/add_game.html', {'form': form})
@@ -64,6 +65,7 @@ def edit_game(request, game_id):
                 messages.success(request, 'Gra została zaktualizowana.')
                 return redirect('core:event_detail', game.event.id)
             else:
+                messages.error(request, form.errors)
                 print(form.errors)
 
         if 'renter_id' in request.POST:#removing renter

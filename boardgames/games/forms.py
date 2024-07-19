@@ -1,5 +1,6 @@
 from django import forms
 from core.models import Game, Event
+from django.core.exceptions import ValidationError
 
 atributes = 'form-control rounded-xl py-3 w-full bg-gray-300'
 
@@ -17,6 +18,12 @@ class GameForm(forms.ModelForm):
     accessible = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Dostępne sztuki'}),initial=1,min_value=1,required=False)
     image = forms.ImageField(widget=forms.FileInput(attrs={ 'placeholder': 'Zdjęcie'}),required=False)
     top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}),required=False)
+
+    def clean_barcode(self):
+        barcode = self.cleaned_data.get('barcode')
+        if Game.objects.filter(barcode=barcode).exists():
+            raise ValidationError("Istnieje już gra z takim kodem kreskowymn", code='unique')
+        return barcode
 
 class BggForm(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}))

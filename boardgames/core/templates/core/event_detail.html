@@ -12,25 +12,7 @@
 
 {% block content %}
 
-    {% if messages %}
-    <ul id="messages-list" class="bg-gray-200 p-6 mb-3 rounded-xl">
-        {% for message in messages %}
-        <li class="{{ message.tags }}">{{ message }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            setTimeout(function() {
-                const messagesList = document.getElementById('messages-list');
-                if (messagesList) {
-                    messagesList.style.opacity = '0';
-                    setTimeout(() => messagesList.style.display = 'none', 1000); 
-                }
-            }, 5000);
-        });
-        </script>
+    {% include 'core/messages.html' %}
 
     <div class="flex mx-20 mt-10  rounded-xl justify-center bg-slate-200 flex-col items-center">
         <div>
