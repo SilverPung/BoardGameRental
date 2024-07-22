@@ -21,7 +21,7 @@ class GameForm(forms.ModelForm):
 
     def clean_barcode(self):
         barcode = self.cleaned_data.get('barcode')
-        if Game.objects.filter(barcode=barcode).exists():
+        if Game.objects.filter(barcode=barcode).exists() and not self.instance:
             raise ValidationError("Istnieje już gra z takim kodem kreskowymn", code='unique')
         return barcode
 
