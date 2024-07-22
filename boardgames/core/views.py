@@ -53,4 +53,17 @@ def logout(request):
     return render(request, 'core/logout.html')# todo: implement logout view
 
 
+def summary(request,event_id):
+    Number_of_games=10
+    if Game.objects.filter(event=event_id).count()<3:
+        return redirect('core:event_detail',event_id)
+    if Game.objects.filter(event=event_id).count()<10:
+        Number_of_games=Game.objects.filter(event=event_id).count()
+    games=Game.objects.filter(event=event_id).order_by('-avg_rating','-rating_count')[:Number_of_games]
+    top_game=games[0]
+    second_game=games[1]
+    third_game=games[2]
+    games=games[3:]
+    context={'top_game':top_game,'second_game':second_game,'third_game':third_game,'games':games}
+    return render(request, 'core/summary.html',context=context)
 

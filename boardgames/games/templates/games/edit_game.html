@@ -104,4 +104,15 @@
             </div>
             <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full">Dodaj</button>
         </div>
+
+        <div class="flex flex-col justify-center bg-slate-200 my-4 mb-8 mx-72">
+            <h1 class="text-3xl text-center my-4">Podsumowanie Gry</h1>
+            <div class="flex justify-center">
+                <span class="text-2xl mx-3">Średnia ocena: {{game.avg_rating}}</span>
+                <span class="text-2xl mx-3">Ilość ocen: {{game.rating_count}}</span>
+            </div>
+            <div class="flex justify-center">
+                <a href="{% url 'core:summary' game.event.id %}" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full min-w-fit">Pełne Podsumowanie</a>
+            </div>
+        </div>
 {% endblock content %}

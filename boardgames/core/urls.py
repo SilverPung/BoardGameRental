@@ -6,4 +6,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('event/<int:event_id>/', views.event_detail, name='event_detail'),
     path('login/', auth_views.LoginView.as_view(template_name='core/login.html',authentication_form=LoginForm), name='login'),
+    path('summary/<int:event_id>/', views.summary, name='summary'),
 ]

@@ -1,0 +1,83 @@
+{% extends 'core/base.html' %}
+{% block title %}Strona główna{% endblock %}
+
+
+{% block sidebar %}
+    
+{% endblock sidebar %}
+    
+
+
+
+
+{% block content %}
+
+    {% include 'core/messages.html' %}
+
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-200 rounded-xl border-gray-400 border-2"> 
+        <div class="justify-center flex flex-col mx-auto w-1/2">
+            <h1 class="mb-6 text-3xl text-center ">Wyniki</h1>
+                <h2 class="mb-3 text-2xl text-center">Pierwsze miejsce:</h2>
+                    <a href="{%url 'games:edit_game'  top_game.id%}" class="w-11/12 my-1 p-2 mx-auto bg-yellow-300 rounded-xl border-gray-400 border-2 text-center">                
+                        <div class="text-lg mb-2">
+                            {{top_game.title|capfirst}}
+                        </div>
+                        <span class="mx-3">Średnia ocena: {{top_game.avg_rating}}</span>
+                        <span class="mx-3">Ilość ocen: {{top_game.rating_count}}</span>
+                    </a>
+                <h2 class="mb-3 text-2xl text-center">Drugie miejsce:</h2>
+                    <a href="{%url 'games:edit_game' second_game.id%}" class="w-11/12 my-1 p-2 mx-auto bg-slate-300 rounded-xl border-gray-400 border-2 text-center">                
+                        <div class="text-lg mb-2">
+                            {{second_game.title|capfirst}}
+                        </div>
+                        <span class="mx-3">Średnia ocena: {{second_game.avg_rating}}</span>
+                        <span class="mx-3">Ilość ocen: {{second_game.rating_count}}</span>
+                    </a>
+                <h2 class="mb-3 text-2xl text-center">Trzecie miejsce:</h2>
+                    <a href="{%url 'games:edit_game' third_game.id%}" class="w-11/12 my-1 p-2 mx-auto bg-orange-300 rounded-xl border-gray-400 border-2 text-center">                
+                        <div class="text-lg mb-2">
+                            {{third_game.title|capfirst}}
+                        </div>
+                        <span class="mx-3">Średnia ocena: {{third_game.avg_rating}}</span>
+                        <span class="mx-3">Ilość ocen: {{third_game.rating_count}}</span>
+                    </a>
+                <h2 class="my-3 text-2xl text-center">Reszta:</h2>
+                {% for game in games %}
+                <a href="{%url 'games:edit_game' game.id%}" class="w-3/4 my-1 p-2 mx-auto bg-gray-300 rounded-xl border-gray-400 border-2 text-center">
+                    <div>
+                        <div class="text-lg mb-2">
+                        {{game.title|capfirst}}
+     
+                        </div>
+                        
+                        <span class="mx-3">Średnia ocena: {{game.avg_rating}}</span>
+                        <span class="mx-3">Ilość ocen: {{game.rating_count}}</span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-200 rounded-xl border-gray-400 border-2"> 
+        <div class="justify-center flex flex-col mx-auto w-1/2">
+            <h1 class="mb-6 text-3xl text-center">Wróć do menu gry</h1>
+        
+            <a href="#" class="py-4 px-8 text-lg rounded-xl bg-teal-500 hover:bg-teal-700 text-white text-center" name="tournament_form">Potwierdź</a>
+        </div>
+    </div>
+    
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-200 rounded-xl border-gray-400 border-2"> 
+        <div class="justify-center flex flex-col mx-auto w-1/2">
+    
+            <h1 class="mb-6 text-3xl text-center">Zakończ wydarzenie</h1>
+            <form method="post" class="justify-center flex flex-col mx-auto w-1/2">
+                {% csrf_token %}
+                <button type="submit" action="#"class="col-span-2 my-4 py-4 px-8 text-lg rounded-xl items-center bg-red-600 hover:bg-red-900 text-white text-center justify-center" onclick="return confirm('Jesteś pewien? Ta akcja jest nieodwracalna!!');">Zatwierdź</button>        
+            </form>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
