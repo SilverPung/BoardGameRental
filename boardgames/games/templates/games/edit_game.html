@@ -59,7 +59,14 @@
         </div>
     {% endif %}
     
+
+
     <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
+        {% if game.image %}
+        <div class="flex justify-center">
+            <img src="{{ game.image.url }}" alt="Game Image" class="w-2/6 h-64 mt-4 text-center rounded-xl border-2 border-gray-400">
+        </div>
+        {% endif %}
         <h1 class="text-3xl text-center mt-4">Edytuj grę</h1>
         <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
@@ -71,6 +78,12 @@
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
                 <span class="text-xl">Tytuł:</span>
                 <span class="w-3/4">{{form.title}}</span>
+            </div>
+            
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+                
+                <span class="text-xl">Obraz:</span>
+                <span class="w-3/4">{{form.image}}</span>
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
                 <span class="text-xl">Dystrybutor:</span>
@@ -84,10 +97,6 @@
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
                 <span class="text-xl">Opis:</span>
                 <span class="w-3/4">{{form.description}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
-                <span class="text-xl">Obraz:</span>
-                <span class="w-3/4">{{form.image}}</span>
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
                 <span class="text-xl">Top:</span>
