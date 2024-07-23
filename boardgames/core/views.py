@@ -67,3 +67,4 @@ def summary(request,event_id):
     context={'top_game':top_game,'second_game':second_game,'third_game':third_game,'games':games}
     return render(request, 'core/summary.html',context=context)
 
+
