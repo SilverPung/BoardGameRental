@@ -98,10 +98,13 @@ def fetch_bgg_data(request):
             bgg_id = bgg_url.split('/')[-2]
             bgg = BGGClient()
             game = bgg.game(game_id=bgg_id)
+            names=game.alternative_names if game.alternative_names else []
+            names.insert(0,game.name)
             data = {
-                'title': game.name,
                 'image': game._image,
-                'distributor': game.publishers[0] if game.publishers else '',
+                'distributors': game.publishers if game.publishers else [],
+                'titles': names
+
             }
             return JsonResponse(data)
 
