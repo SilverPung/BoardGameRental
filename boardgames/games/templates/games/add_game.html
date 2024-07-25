@@ -1,4 +1,14 @@
 {% extends 'core/base.html' %}
+{% load static %}
+
+
+{% block extra_head %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="{% static 'js/fetch_bgg_data.js' %}"></script>
+{% endblock extra_head %}
+
+
 
 
 {% block sidebar %}
@@ -11,50 +21,61 @@
     {% include 'core/messages.html' %}
         
     
-    <div class="flex mx-20 mt-10  rounded-xl justify-center bg-slate-200 flex-col items-center">
+    <div class="flex mx-20 mt-10 rounded-xl justify-center bg-slate-200 flex-col items-center">
         <div>
             <h1 class="text-3xl font-bold my-3 mt-5">Dodaj grę</h1>
         </div>
     </div>
-
+    
+    
     <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
         <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                <span class="text-xl">BGG URL:</span>
+                <span class="w-3/4"><input type="url" id="bggUrl" name="bgg_url" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
+                <button type="button" id="fetchData" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 ml-4 rounded-full">Fetch Data</button>
+            </div>
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Kod kreskowy:</span>
-                <span class="w-3/4">{{form.barcode}}</span>
+                <span class="w-3/4">{{ form.barcode }}</span>
             </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Tytuł:</span>
-                <span class="w-3/4">{{form.title}}</span>
+                <span class="w-3/4">
+                    <input type="checkbox" id="manualTitleToggle" class="mr-2 hidden">Ręczny wpis
+                    <input type="text" id="manual_title" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                    <select id="titles_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
+                    <input type="hidden" id="final_title" name="title">
+                </span>
             </div>
-            
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
-                <span class="text-xl">Obraz:</span>
-                <span class="w-3/4">{{form.image}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Dystrybutor:</span>
-                <span class="w-3/4">{{form.distributor}}</span>
+                <span class="w-3/4">
+                    <input type="checkbox" id="manualDistributorToggle" class="mr-2 hidden">Ręczny wpis
+                    <input type="text" id="manual_distributor" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                    <select id="distributors_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
+                    <input type="hidden" id="final_distributor" name="distributor">
+                </span>
             </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                <span class="text-xl">Obraz:</span>
+                <span class="w-3/4"><input type="text" id="id_image" name="image" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
+            </div>
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Ilość sztuk:</span>
-                <span class="w-3/4">{{form.quantity}}</span> 
+                <span class="w-3/4">{{ form.quantity }}</span>
             </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Opis:</span>
-                <span class="w-3/4">{{form.description}}</span>
+                <span class="w-3/4">{{ form.description }}</span>
             </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
+            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Top:</span>
-                <span class="w-3/4">{{form.top}}</span>
+                <span class="w-3/4">{{ form.top }}</span>
             </div>
             <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full">Dodaj</button>
-
         </form>
-            
-
     </div>
-
 {% endblock content %}
     

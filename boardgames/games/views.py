@@ -3,6 +3,9 @@ from .forms import GameForm, RentalForm, RatingForm
 from core.models import Game, Event, Renter
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+from boardgamegeek import BGGClient
 # Create your views here.
 LIMIT_OF_RENTED_GAMES = 2 #limit of games that can be rented by one user
 @login_required
@@ -86,3 +89,25 @@ def edit_game(request, game_id):
             return redirect('core:event_detail', game.event.id)
     context={'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters, 'rating_form': rating_form}
     return render(request, 'games/edit_game.html',context)
+
+
+def fetch_bgg_data(request):
+    if request.method == 'GET':
+        bgg_url = request.GET.get('bgg_url')
+        if bgg_url:
+            bgg_id = bgg_url.split('/')[-2]
+            bgg = BGGClient()
+            game = bgg.game(game_id=bgg_id)
+            names=game.alternative_names if game.alternative_names else []
+            names.insert(0,game.name)
+            data = {
+                'image': game._image,
+                'distributors': game.publishers if game.publishers else [],
+                'titles': names
+
+            }
+            return JsonResponse(data)
+
+        return JsonResponse({'error': 'BGG URL is required'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request'}, status=400)
