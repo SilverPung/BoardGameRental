@@ -36,8 +36,11 @@ def event_detail(request, event_id):
             query = form.cleaned_data['query']
             games = Game.objects.filter(
                 Q(title__icontains=query) | Q(barcode__icontains=query),
-                event=event
+                event=event 
             )
+            iterator = 0
+        else:
+            games = Game.objects.filter(event=event)
     start_index = iterator * 5
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
