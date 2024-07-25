@@ -1,4 +1,10 @@
 $(document).ready(function() {
+    $('#manualTitleToggle').prop('checked', true);
+    $('#manualDistributorToggle').prop('checked', true);
+    
+    
+    
+    
     $('#fetchData').on('click', function() {
         var bggUrl = $('#bggUrl').val();
         if (bggUrl) {
@@ -22,18 +28,27 @@ $(document).ready(function() {
                         $('#distributors_select').append($('<option>').val(distributor).text(distributor));
                     });
 
+                    // Show the manual input toggle buttons
                     $('#manualTitleToggle').removeClass('hidden');
                     $('#manualDistributorToggle').removeClass('hidden');
-                    
-                    // Show the titles select and hide the manual input
+
+                    // Show the titles and distributors select, and hide the manual inputs
                     $('#titles_select').show();
                     $('#manual_title').hide();
                     $('#manualTitleToggle').prop('checked', false);
 
-                    // Show the distributors select and hide the manual input
                     $('#distributors_select').show();
                     $('#manual_distributor').hide();
                     $('#manualDistributorToggle').prop('checked', false);
+
+                    $('#manualTitleToggle').prop('checked', false);
+                    $('#manualDistributorToggle').prop('checked', false);
+                    $('#titles_select').show();
+                    $('#manual_title').hide();
+                    $('#distributors_select').show();
+                    $('#manual_distributor').hide();
+
+
                 },
                 error: function() {
                     alert('An error occurred. Please try again.');
@@ -63,6 +78,21 @@ $(document).ready(function() {
         } else {
             $('#distributors_select').show();
             $('#manual_distributor').hide();
+        }
+    });
+
+    // Update hidden fields on form submit
+    $('form').on('submit', function() {
+        if ($('#manualTitleToggle').is(':checked')) {
+            $('#final_title').val($('#manual_title').val());
+        } else {
+            $('#final_title').val($('#titles_select').val());
+        }
+
+        if ($('#manualDistributorToggle').is(':checked')) {
+            $('#final_distributor').val($('#manual_distributor').val());
+        } else {
+            $('#final_distributor').val($('#distributors_select').val());
         }
     });
 });
