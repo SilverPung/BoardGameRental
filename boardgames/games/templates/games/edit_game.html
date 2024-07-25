@@ -115,4 +115,18 @@
                 <a href="{% url 'core:summary' game.event.id %}" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full min-w-fit">Pełne Podsumowanie</a>
             </div>
         </div>
+    </form>
+
+        
+            <div class="fixed bottom-[80px] right-3 mb-4 mr-4">
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_type" value="delete_game" />
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-full">
+                        Usuń grę
+                    </button>
+                </form>
+            </div>
+
+
 {% endblock content %}

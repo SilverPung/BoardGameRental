@@ -34,16 +34,22 @@ def edit_game(request, game_id):
     rental_form = RentalForm()  
     rating_form = RatingForm()
     list_of_renters = game.list_of_renters.all()  
+
     if request.method == 'POST':
         form_type = request.POST.get('form_type', None)
         
-        if form_type == 'rental':#renting game
+        if form_type == 'delete_game':  # Deleting game
+            event_id = game.event.id
+            game.delete()
+            messages.success(request, 'Gra została usunięta.')
+            return redirect('core:event_detail', event_id)
+        
+        elif form_type == 'rental':  # Renting game
             rental_form = RentalForm(request.POST)
-
             if rental_form.is_valid():
-                renters_barcode=rental_form.cleaned_data['barcode']
+                renters_barcode = rental_form.cleaned_data['barcode']
                 try:
-                    can_be_rented = Renter.objects.get(barcode=renters_barcode).how_many_games>=LIMIT_OF_RENTED_GAMES
+                    can_be_rented = Renter.objects.get(barcode=renters_barcode).how_many_games >= LIMIT_OF_RENTED_GAMES
                 except Renter.DoesNotExist:
                     can_be_rented = False
                 if renters_barcode in list_of_renters.values_list('barcode', flat=True) or can_be_rented:
@@ -53,17 +59,15 @@ def edit_game(request, game_id):
                     game.accessible -= 1
                     game.save()
                     renter = Renter.objects.get(barcode=renters_barcode)
-                    renter.how_many_games+=1
+                    renter.how_many_games += 1
                     renter.save()
                     messages.success(request, 'Gra została wypożyczona.')
-                
                 return redirect('core:event_detail', game.event.id)
-            
             else:
                 print(rental_form.errors)
 
-        elif form_type == 'edit_game':  # editing game
-            form = GameForm(request.POST,request.FILES, instance=game)
+        elif form_type == 'edit_game':  # Editing game
+            form = GameForm(request.POST, request.FILES, instance=game)
             if form.is_valid():
                 form.save()
                 messages.success(request, 'Gra została zaktualizowana.')
@@ -72,25 +76,25 @@ def edit_game(request, game_id):
                 messages.error(request, form.errors)
                 print(form.errors)
 
-        if 'renter_id' in request.POST:#removing renter
+        elif 'renter_id' in request.POST:  # Removing renter
             renter_id = request.POST.get('renter_id', None)
             renter = game.list_of_renters.get(id=renter_id)
-            renter.how_many_games-=1
+            renter.how_many_games -= 1
             renter.save()
             game.list_of_renters.remove(renter)
             game.accessible += 1
             game.save()
-            rating=RatingForm(request.POST)
-            if rating.is_valid() and int(rating.cleaned_data['rating'])>0:
-                rating=rating.cleaned_data['rating']
-                game.avg_rating=(game.avg_rating*game.rating_count+int(rating))/(game.rating_count+1)
-                game.rating_count+=1
+            rating = RatingForm(request.POST)
+            if rating.is_valid() and int(rating.cleaned_data['rating']) > 0:
+                rating = rating.cleaned_data['rating']
+                game.avg_rating = (game.avg_rating * game.rating_count + int(rating)) / (game.rating_count + 1)
+                game.rating_count += 1
                 game.save()
             messages.success(request, 'Gra została zwrócona.')
             return redirect('core:event_detail', game.event.id)
-    context={'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters, 'rating_form': rating_form}
-    return render(request, 'games/edit_game.html',context)
 
+    context = {'form': form, 'game': game, 'rental_form': rental_form, 'list_of_renters': list_of_renters, 'rating_form': rating_form}
+    return render(request, 'games/edit_game.html', context)
 
 def fetch_bgg_data(request):
     if request.method == 'GET':
