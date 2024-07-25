@@ -34,7 +34,7 @@
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">BGG URL:</span>
                 <span class="w-3/4"><input type="url" id="bggUrl" name="bgg_url" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
-                <button type="button" id="fetchData" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 ml-4 rounded-full">Fetch Data</button>
+                <button type="button" id="fetchData" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 ml-4 rounded-full">Wczytaj</button>
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Kod kreskowy:</span>
@@ -60,7 +60,9 @@
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Obraz:</span>
-                <span class="w-3/4"><input type="text" id="id_image" name="image" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
+                <span class="w-3/4">
+                    <input type="text" id="id_image" name="image_url" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></span>
+                    {{form.image}}
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Ilość sztuk:</span>

@@ -17,6 +17,7 @@ def add_game(request, event_id):
             game=form.save(commit=False)
             game.event=Event.objects.get(id=event_id)
             game.save()
+            messages.success(request, 'Gra została dodana pomyślnie.')
             return redirect('core:event_detail',event_id)
         else:
             print(form.errors)
