@@ -44,7 +44,7 @@ def event_detail(request, event_id):
     start_index = iterator * 5
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
-    max_iterator = games.count() // 5
+    max_iterator = (games.count()-1) // 5
     return render(request, 'core/event_detail.html', {'event': event, 'form': form,
                                                       'top_games': top_games, 
                                                       'iterator': iterator, 

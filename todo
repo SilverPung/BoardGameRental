@@ -1,14 +1,11 @@
 
-upgrade automatical bgg info input!!!!!
-
-
 other:w
 add list of known publishers 
-adding to the list of rented games
-validation if user has allready rented game and if is this game (in case of hadling more then 1 game per renter)
-
+delete renter
 
 
 add:
-pop if to delete renter
+
 comments for clarity of code
+pop up if to delete a game
+when editing if possilbe is acremented acrement accesible too
