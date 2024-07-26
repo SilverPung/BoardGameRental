@@ -3,7 +3,7 @@ from core.models import Game, Event
 from django.core.exceptions import ValidationError
 import requests
 from django.core.files.base import ContentFile
-atributes = 'form-control rounded-xl py-3 w-full bg-gray-300'
+atributes = 'form-control rounded-xl py-3 w-full bg-gray-300 pl-2'
 
 
 class GameForm(forms.ModelForm):
@@ -13,12 +13,13 @@ class GameForm(forms.ModelForm):
         model = Game
         fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url']
 
-    title = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tytuł'}))
+    title = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Tytuł'}))
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy'}))
     description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-xl py-6 w-full bg-gray-300', 'placeholder': 'Opis'}), required=False)
+    distributor = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Dystrybutor'}), required=False)
     event = forms.ModelChoiceField(required=False, queryset=Event.objects.all(), widget=forms.HiddenInput())
-    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Ilość sztuk'}), initial=1, min_value=1)
-    accessible = forms.IntegerField(widget=forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Dostępne sztuki'}), initial=1, min_value=1, required=False)
+    quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Ilość sztuk'}), initial=1, min_value=1)
+    accessible = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Dostępne sztuki'}), initial=1, min_value=1, required=False)
     image = forms.ImageField(widget=forms.FileInput(attrs={'placeholder': 'Zdjęcie'}), required=False)
     top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), required=False)
 

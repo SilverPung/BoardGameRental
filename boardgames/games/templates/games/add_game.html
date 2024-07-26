@@ -2,8 +2,9 @@
 {% load static %}
 
 
-{% block extra_head %}
+{% block title %}Dodaj grę {% endblock title %}
 
+{% block extra_head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/fetch_bgg_data.js' %}"></script>
 {% endblock extra_head %}

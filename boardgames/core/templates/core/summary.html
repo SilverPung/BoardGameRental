@@ -1,5 +1,5 @@
 {% extends 'core/base.html' %}
-{% block title %}Strona główna{% endblock %}
+{% block title %}Oceny {% endblock %}
 
 
 {% block sidebar %}
@@ -60,9 +60,8 @@
     
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-200 rounded-xl border-gray-400 border-2"> 
         <div class="justify-center flex flex-col mx-auto w-1/2">
-            <h1 class="mb-6 text-3xl text-center">Wróć do menu gry</h1>
-        
-            <a href="#" class="py-4 px-8 text-lg rounded-xl bg-teal-500 hover:bg-teal-700 text-white text-center" name="tournament_form">Potwierdź</a>
+            <h1 class="mb-6 text-3xl text-center">Wróć do wydarzenia</h1>
+            <a href="{%url 'core:event_detail' top_game.event.id%}" class="py-4 px-8 text-lg rounded-xl bg-gray-500 hover:bg-gray-700 text-white text-center" name="tournament_form">Potwierdź</a>
         </div>
     </div>
     

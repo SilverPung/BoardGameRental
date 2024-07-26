@@ -1,13 +1,7 @@
 {% extends 'core/base.html' %}
-{% block title %}Strona główna{% endblock %}
 
 
-{% block sidebar %}
-    
-{% endblock sidebar %}
-    
-
-
+{% block title %}{{game.title|capfirst}} {% endblock title %}
 
 
 {% block content %}
@@ -91,7 +85,7 @@
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
                 <span class="text-xl">Dostępnych/w Systemie:</span>
-                <span class="">{{form.accessible}}</span>
+                <span class="mr-2">{{form.accessible}}</span>
                 <span class="">{{form.quantity}}</span> 
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >

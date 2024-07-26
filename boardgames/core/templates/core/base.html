@@ -1,3 +1,6 @@
+{%load static %}
+
+
 <!doctype html>
 <html>
     <head>
@@ -11,7 +14,19 @@
     </head>
     <body class="bg-slate-700 flex flex-col min-h-screen ">
         <div class="grid grid-cols-12 flex-grow">
-            <div class="col-span-1 bg-slate-200 h-min-screen overflow-auto border-r-2 border-gray-700 border-l-2" >
+            <div class="col-span-1 bg-slate-200 h-min-screen overflow-auto border-r-2 border-gray-700 border-l-2 flex flex-col" >
+                
+                
+                <nav class="text-center flex flex-col">
+                    <a href="#" class="text-center text-2xl bg-slate-200 py-4 border-b-2 border-gray-700">
+                        <img src="{% static 'images/logo.png' %}" alt="logo" class="w-20 h-20 mx-auto my-4">
+                    </a>
+                    
+                    <a href="{% url 'core:home' %}" class="text-center text-xl bg-slate-200 py-4 border-b-2 border-gray-700 hover:bg-gray-400">Home</a>
+                </nav> 
+                
+                
+                
                 {%block sidebar%}
     
                 {%endblock%}
