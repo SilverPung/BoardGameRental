@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from .models import Event, Game
-from .forms import EventForm, SearchForm
+from .forms import EventForm, SearchForm, SignupForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
-
+from django.contrib.auth import logout
 @login_required
 def home(request):
     events = Event.objects.filter(allowed_users__in=[request.user])
@@ -50,12 +50,7 @@ def event_detail(request, event_id):
                                                       'iterator': iterator, 
                                                       'max_iterator': max_iterator})
 
-
 @login_required
-def logout(request):
-    return render(request, 'core/logout.html')# todo: implement logout view
-
-
 def summary(request,event_id):
     Number_of_games=10
     if Game.objects.filter(event=event_id).count()<3:
@@ -71,3 +66,22 @@ def summary(request,event_id):
     return render(request, 'core/summary.html',context=context)
 
 
+@login_required
+def logout_view(request):
+    
+    if request.method == 'POST':
+        logout(request)
+        return redirect('core:home')
+    
+    return render(request, 'core/logout.html')
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('core:login')
+    else:
+        form = SignupForm()
+    return render(request, 'core/signup.html', {'form': form})

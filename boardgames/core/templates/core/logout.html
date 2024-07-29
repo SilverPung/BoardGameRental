@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Wyloguj{% endblock %}
+
+{% block sidebar %}
+
+{% endblock %}
+
+{% block content %} 
+    <div class="w-1/2 my-6 mx-auto p-6 bg-slate-200 rounded-xl border-gray-700 border-2"> 
+        <div class="justify-center flex flex-col mx-auto w-1/2"> 
+            <h1 class="mb-6 text-3xl font-bold text-center">Wyloguj się</h1>
+            {% if request.user.is_authenticated %}
+                <h1 class="text-3xl text-center  mb-6">Jesteś pewien, że chcesz się wylogować?</h1>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Log out</button>
+                </form>
+            {% else %}
+                <h1 class="text-3xl text-center font-bold mb-6">You are not logged in</h1>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
