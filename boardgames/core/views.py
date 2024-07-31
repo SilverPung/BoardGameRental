@@ -1,9 +1,15 @@
 from django.shortcuts import render, redirect
 from .models import Event, Game
-from .forms import EventForm, SearchForm, SignupForm
+from .forms import EventForm, SearchForm, SignupForm, UserForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
+from django.urls import reverse
+from django.contrib.auth.views import PasswordChangeView
+
+
+
+
 @login_required
 def home(request):
     events = Event.objects.filter(allowed_users__in=[request.user])
@@ -85,3 +91,27 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'core/signup.html', {'form': form})
+
+
+@login_required
+def profile(request):
+    
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        if user_form.is_valid():
+            user_form.save()
+            redirect('core:home')
+    else:
+        user_form = UserForm(instance=request.user)
+
+    return render(request, 'core/profile.html', {'form': user_form})
+
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'core/password_change.html'
+
+    def get_success_url(self):
+        return reverse('core:home')
+    
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)

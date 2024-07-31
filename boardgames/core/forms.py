@@ -47,3 +47,11 @@ class SignupForm(UserCreationForm):
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': login_atributes, 'placeholder': 'Potwierdź Hasło'}))
 class SearchForm(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}),required=False, label='' ,initial='')
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': login_atributes, 'placeholder': 'Nazwa Użytkownika'}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': login_atributes, 'placeholder': 'Email'}))
