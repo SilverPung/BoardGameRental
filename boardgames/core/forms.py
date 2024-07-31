@@ -1,7 +1,8 @@
 from django import forms
 from .models import Event
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+
 
 login_atributes = 'form-control rounded-xl py-3 w-full bg-gray-300'
 
@@ -55,3 +56,20 @@ class UserForm(forms.ModelForm):
         fields = ['username', 'email']
     username = forms.CharField(widget=forms.TextInput(attrs={'class': login_atributes, 'placeholder': 'Nazwa Użytkownika'}))
     email = forms.EmailField(widget=forms.EmailInput(attrs={'class': login_atributes, 'placeholder': 'Email'}))
+
+
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['old_password'].widget = forms.PasswordInput(attrs={
+            'class': login_atributes,
+            'placeholder': 'Obecne Hasło',
+        })
+        self.fields['new_password1'].widget = forms.PasswordInput(attrs={
+            'class': login_atributes,
+            'placeholder': 'Nowe Hasło',
+        })
+        self.fields['new_password2'].widget = forms.PasswordInput(attrs={
+            'class': login_atributes,
+            'placeholder': 'Potwierdź Nowe Hasło',
+        })

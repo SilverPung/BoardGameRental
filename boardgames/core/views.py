@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from .models import Event, Game
-from .forms import EventForm, SearchForm, SignupForm, UserForm
+from .forms import EventForm, SearchForm, SignupForm, UserForm, CustomPasswordChangeForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
 from django.urls import reverse
 from django.contrib.auth.views import PasswordChangeView
+
 
 
 
@@ -100,7 +101,7 @@ def profile(request):
         user_form = UserForm(request.POST, instance=request.user)
         if user_form.is_valid():
             user_form.save()
-            redirect('core:home')
+            return redirect('core:home')
     else:
         user_form = UserForm(instance=request.user)
 
@@ -108,6 +109,7 @@ def profile(request):
 
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'core/password_change.html'
+    form_class = CustomPasswordChangeForm
 
     def get_success_url(self):
         return reverse('core:home')
@@ -115,3 +117,4 @@ class CustomPasswordChangeView(PasswordChangeView):
     def form_valid(self, form):
         form.save()
         return super().form_valid(form)
+    
