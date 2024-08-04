@@ -29,10 +29,10 @@ jobs:
       run: cd boardgames
     - name: Build and Run Docker Compose
       run: |
-        docker-compose up --build -d
+        docker-compose build
     - name: Run Tests
       run: |
-        docker-compose exec web python boardgames/manage.py test
+        docker-compose run web python manage.py test
     - name: Tear Down Docker Compose
       run: |
         docker-compose down
