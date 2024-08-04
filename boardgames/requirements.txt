@@ -49,3 +49,4 @@ typing_extensions==4.12.2
 url-normalize==1.4.3
 urllib3==2.2.2
 wcwidth==0.2.13
+whitenoise==6.7.0

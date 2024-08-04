@@ -1,10 +1,10 @@
-name: Django CI
+name: Django CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "production" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "production" ]
 
 jobs:
   build:
@@ -25,6 +25,14 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Change Directory
+      run: cd path/to/your/docker-compose/files
+    - name: Build and Run Docker Compose
+      run: |
+        docker-compose up --build -d
     - name: Run Tests
       run: |
-        python boardgames/manage.py test
+        docker-compose exec web python boardgames/manage.py test
+    - name: Tear Down Docker Compose
+      run: |
+        docker-compose down
