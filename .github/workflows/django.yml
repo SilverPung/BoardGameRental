@@ -26,7 +26,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r boardgames/requirements.txt
     - name: Change Directory
-      run: cd path/to/your/docker-compose/files
+      run: cd boardgames
     - name: Build and Run Docker Compose
       run: |
         docker-compose up --build -d
