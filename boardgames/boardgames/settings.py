@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z6^w7fm+w&&l%e16t_pcn6rb#5_1#puv8x-3lg)b4gm-(^81(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
@@ -83,15 +84,17 @@ WSGI_APPLICATION = 'boardgames.wsgi.application'
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "boardgames",  # Set to your database name",
-        "USER": "boardgame",
-        "PASSWORD": "postgres",
-        "HOST": "localhost",  # Set to your database host
-        "PORT": "5432",       # Set to your database port
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),  # This should be 'db', not '127.0.0.1'
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
+
+DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 
 
