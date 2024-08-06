@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from core.views import custom_page_not_found
+from django.conf.urls import handler404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,3 +30,5 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    handler404 = custom_page_not_found

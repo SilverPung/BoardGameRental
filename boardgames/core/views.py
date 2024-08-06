@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from .models import Event, Game
 from .forms import EventForm, SearchForm, SignupForm
@@ -91,6 +92,14 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'core/signup.html', {'form': form})
+
+
+def custom_page_not_found(request, exception):
+    return render(request, 'core/404.html', status=404)
+
+
+
+
 
 
 
