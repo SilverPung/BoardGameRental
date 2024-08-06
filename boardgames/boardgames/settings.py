@@ -24,9 +24,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-z6^w7fm+w&&l%e16t_pcn6rb#5_1#puv8x-3lg)b4gm-(^81(w'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get('DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '[::1]']
 
 LOGIN_URL = 'core:login'
 # Application definition
@@ -93,8 +93,6 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT'),
     }
 }
-
-DEBUG = os.environ.get('DEBUG', '0') == '1'
 
 
 

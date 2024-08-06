@@ -22,7 +22,6 @@ services:
     depends_on:
       - db
     environment:
-      DEBUG: "1"
       DB_NAME: boardgames
       DB_USER: boardgames
       DB_PASSWORD: postgres
