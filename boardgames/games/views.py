@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import GameForm, RentalForm, RatingForm
-from core.models import Game, Event, Renter
+from core.models import Game, Event, Renter,KnownDistributor
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
@@ -10,6 +10,7 @@ from boardgamegeek import BGGClient
 LIMIT_OF_RENTED_GAMES = 2 #limit of games that can be rented by one user
 @login_required
 def add_game(request, event_id):
+    known_distributors = KnownDistributor.objects.filter(event=event_id)
     form = GameForm()
     if request.method == 'POST':
         form = GameForm(request.POST, request.FILES)

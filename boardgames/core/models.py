@@ -31,6 +31,12 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
+class KnownDistributor(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE,default=None, blank=True,null=True)
+    distributor = models.CharField(max_length=100)
+    
+    def __str__(self):
+        return self.distributor
 
 class Game(models.Model):
 
@@ -48,9 +54,15 @@ class Game(models.Model):
     top= models.BooleanField(default=False)
     
     def save(self,*args, **kwargs):
+        self.distributor=self.distributor.capitalize()
+        self.title=self.title.capitalize()
+        
         if not self.pk:  
             self.accessible = self.quantity  
         super(Game, self).save(*args, **kwargs)  
+        if self.distributor and not KnownDistributor.objects.filter(event=self.event, distributor=self.distributor.capitalize()).exists():
+            known_distributor = KnownDistributor(event=self.event, distributor=self.distributor)
+            known_distributor.save()
 
     def add_renter(self, barcode):
         if renter := Renter.objects.filter(barcode=barcode).first():
@@ -66,8 +78,7 @@ class Game(models.Model):
             self.save()
     
     def __str__(self):
-        return self.title
-    
+        return self.title  
     
 class Renter(models.Model):
     barcode = models.CharField(max_length=20)
@@ -77,3 +88,4 @@ class Renter(models.Model):
 
     def __str__(self):
         return self.barcode
+    
