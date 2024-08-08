@@ -7,6 +7,7 @@
 {% block extra_head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/fetch_bgg_data.js' %}"></script>
+<div id="eventData" data-event-id="{{ event_id }}"></div>
 {% endblock extra_head %}
 
 
@@ -55,6 +56,7 @@
                 <span class="w-3/4">
                     <input type="checkbox" id="manualDistributorToggle" class="mr-2 hidden">Ręczny wpis
                     <input type="text" id="manual_distributor" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                    <div id="manual_distributor_suggestions" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></div>
                     <select id="distributors_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
                     <input type="hidden" id="final_distributor" name="distributor">
                 </span>

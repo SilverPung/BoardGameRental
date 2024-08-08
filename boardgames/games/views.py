@@ -10,7 +10,6 @@ from boardgamegeek import BGGClient
 LIMIT_OF_RENTED_GAMES = 2 #limit of games that can be rented by one user
 @login_required
 def add_game(request, event_id):
-    known_distributors = KnownDistributor.objects.filter(event=event_id)
     form = GameForm()
     if request.method == 'POST':
         form = GameForm(request.POST, request.FILES)
@@ -25,7 +24,7 @@ def add_game(request, event_id):
             messages.error(request, form.errors)
     else:
         form = GameForm()
-    return render(request, 'games/add_game.html', {'form': form})
+    return render(request, 'games/add_game.html', {'form': form, 'event_id': event_id})
 
 
 @login_required
@@ -117,3 +116,11 @@ def fetch_bgg_data(request):
         return JsonResponse({'error': 'BGG URL is required'}, status=400)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def get_distributor_suggestions(request):
+    event_id = request.GET.get('event_id')
+    # Fetch suggestions based on the query (replace with your actual data fetching logic)
+    suggestions = KnownDistributor.objects.filter(event=Event.objects.get(id=event_id)).values_list('distributor', flat=True)
+    
+    return JsonResponse(suggestions, safe=False)
+        
