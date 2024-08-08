@@ -68,14 +68,26 @@ class Game(models.Model):
         if renter := Renter.objects.filter(barcode=barcode).first():
             if not self.list_of_renters.filter(id=renter.id).exists():
                 self.list_of_renters.add(renter)
+                self.accessible -= 1
+                renter.how_many_games += 1
+                renter.save()
                 self.save()
+                
         else:
             renter = Renter(barcode=barcode)
             renter.save()
             renter.event = self.event
             renter.save()
+            renter.how_many_games += 1
+            renter.save()
             self.list_of_renters.add(renter)
+            self.accessible -= 1
             self.save()
+    
+    def add_rating(self, rating):
+        self.avg_rating = (self.avg_rating * self.rating_count + float(rating)) / (self.rating_count + 1)
+        self.rating_count += 1
+        self.save()        
     
     def __str__(self):
         return self.title  

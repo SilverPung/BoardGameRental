@@ -56,11 +56,7 @@ def edit_game(request, game_id):
                     messages.error(request, 'Gra jest już wypożyczona lub osoba wypożyczająca ma już maksymalną ilość gier.')
                 else:
                     game.add_renter(renters_barcode)
-                    game.accessible -= 1
                     game.save()
-                    renter = Renter.objects.get(barcode=renters_barcode)
-                    renter.how_many_games += 1
-                    renter.save()
                     messages.success(request, 'Gra została wypożyczona.')
                 return redirect('core:event_detail', game.event.id)
             else:
@@ -87,9 +83,7 @@ def edit_game(request, game_id):
             rating = RatingForm(request.POST)
             if rating.is_valid() and int(rating.cleaned_data['rating']) > 0:
                 rating = rating.cleaned_data['rating']
-                game.avg_rating = (game.avg_rating * game.rating_count + int(rating)) / (game.rating_count + 1)
-                game.rating_count += 1
-                game.save()
+                game.add_rating(rating)
             messages.success(request, 'Gra została zwrócona.')
             return redirect('core:event_detail', game.event.id)
 
