@@ -3,9 +3,23 @@
 
  
 {% block sidebar %}
-    
+    <div class="text-center text-xl bg-slate-200 py-4 border-y-4 border-gray-700 my-6">
+        <h1 class="text-2xl mb-3">Filtry</h1>
+        <div class="flex flex-col items-center border-t-2 border-gray-700">
+            <!-- Checkbox form for filtering top games -->
+            <form method="get" action="">
+                <label class=" mt-3 block">
+                    <input type="checkbox" name="top" value="true" class="mr-2"
+                        {% if request.GET.top == 'true' %}checked{% endif %}>
+                    Top
+                </label>
+                <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full mt-4">
+                    Fitruj
+                </button>
+            </form>
+        </div>
+    </div>
 {% endblock sidebar %}
-    
 
 
 
@@ -41,7 +55,10 @@
 
     <form method="get" action="{% url 'core:event_detail' event.id %}" class="flex justify-center  mt-2 mx-72">
         <input name="iterator" type="hidden" value="{{ iterator }}">
-        
+        {% if request.GET.top %}
+            <input type="hidden" name="top" value="{{ request.GET.top }}">
+        {% endif %}
+
         {% if iterator > 0 %}
             <button type="submit" name="action" value="decrement" class="mt-2 px-8 py-4 bg-red-600 text-white rounded-xl inline-block"><--</button>
         {% endif %}

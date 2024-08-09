@@ -27,6 +27,7 @@ def home(request):
 @login_required
 def event_detail(request, event_id):
     action = request.GET.get('action')
+    top = request.GET.get('top')
     iterator = int(request.GET.get('iterator', 0)) 
 
     if action == 'increment':
@@ -34,9 +35,16 @@ def event_detail(request, event_id):
     elif action == 'decrement':
         iterator -= 1
 
+
+    
+
     event = Event.objects.get(id=event_id)
     games = Game.objects.filter(event=event)
     form = SearchForm()
+
+    if top == 'true':
+        games=games.filter(top=True)
+
     if request.method == 'POST':
         form = SearchForm(request.POST)
         if form.is_valid():
