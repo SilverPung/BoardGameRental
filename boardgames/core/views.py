@@ -5,8 +5,8 @@ from .forms import EventForm, SearchForm, SignupForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
-
-
+from rest_framework import generics
+from .serializers import GameSerializer
 
 
 
@@ -106,9 +106,10 @@ def custom_page_not_found(request, exception):
     return render(request, 'core/404.html', status=404)
 
 
+class GameListView(generics.ListAPIView):
+    serializer_class = GameSerializer
 
-
-
-
-
+    def get_queryset(self):
+        event_id = self.kwargs['event_id']
+        return Game.objects.filter(event=event_id)
     

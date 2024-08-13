@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'core',
     'account',
-    'games'
+    'games',
+    'rest_framework'
     
 ]
 

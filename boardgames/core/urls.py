@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 from .forms import LoginForm
-
+from .views import GameListView
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -11,5 +11,6 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout_view'),
     path('summary/<int:event_id>/', views.summary, name='summary'),
     path('signup/', views.signup, name='signup'),
+    path('api/games/<int:event_id>/', GameListView.as_view(), name='api_games'),
 ]
 
