@@ -1,6 +1,7 @@
 $(document).ready(function() {
     $('#manualTitleToggle').prop('checked', true);
     $('#manualDistributorToggle').prop('checked', true);
+    $('#manualDescriptionToggle').prop('checked', true);
 
     $('#fetchData').on('click', function() {
         var bggUrl = $('#bggUrl').val();
@@ -15,19 +16,25 @@ $(document).ready(function() {
                     $('#id_image').val(data.image);
                     $('#titles_select').empty();
                     $('#distributors_select').empty();
+                    $('#auto_description').val(data.description);
+                    $('#bgg_id').val(data.bgg_id);
 
                     // Populate 'titles_select'
                     data.titles.forEach(function(title) {
                         $('#titles_select').append($('<option>').val(title).text(title));
                     });
 
+
                     data.distributors.forEach(function(distributor) {
                         $('#distributors_select').append($('<option>').val(distributor).text(distributor));
                     });
 
+
+
                     // Show the manual input toggle buttons
                     $('#manualTitleToggle').removeClass('hidden');
                     $('#manualDistributorToggle').removeClass('hidden');
+                    $('#manualDescriptionToggle').removeClass('hidden');
 
                     // Show the titles and distributors select, and hide the manual inputs
                     $('#titles_select').show();
@@ -38,12 +45,11 @@ $(document).ready(function() {
                     $('#manual_distributor').hide();
                     $('#manualDistributorToggle').prop('checked', false);
 
-                    $('#manualTitleToggle').prop('checked', false);
-                    $('#manualDistributorToggle').prop('checked', false);
-                    $('#titles_select').show();
-                    $('#manual_title').hide();
-                    $('#distributors_select').show();
-                    $('#manual_distributor').hide();
+                    $('#auto_description').show();
+                    $('#manual_description').hide();
+                    $('#manualDescriptionToggle').prop('checked', false);
+
+    
                 },
                 error: function() {
                     alert('An error occurred. Please try again.');
@@ -74,6 +80,16 @@ $(document).ready(function() {
         } else {
             $('#distributors_select').show();
             $('#manual_distributor').hide();
+        }
+    });
+
+    $('#manualDescriptionToggle').on('change', function() {
+        if ($(this).is(':checked')) {
+            $('#auto_description').hide();
+            $('#manual_description').show();
+        } else {
+            $('#auto_description').show();
+            $('#manual_description').hide();
         }
     });
 
@@ -122,17 +138,24 @@ $(document).ready(function() {
     });
 
     // Update hidden fields on form submit
+        // Existing code...
+    
+        // Update hidden fields on form submit
     $('form').on('submit', function() {
-        if ($('#manualTitleToggle').is(':checked')) {
-            $('#final_title').val($('#manual_title').val());
-        } else {
-            $('#final_title').val($('#titles_select').val());
-        }
-
-        if ($('#manualDistributorToggle').is(':checked')) {
-            $('#final_distributor').val($('#manual_distributor').val());
-        } else {
-            $('#final_distributor').val($('#distributors_select').val());
-        }
+            if ($('#manualTitleToggle').is(':checked')) {
+                $('#final_title').val($('#manual_title').val());
+                console.log('Manual title selected:', $('#manual_title').val());
+            } else {
+                $('#final_title').val($('#titles_select').val());
+                console.log('Selected title from dropdown:', $('#titles_select').val());
+            }
+    
+            if ($('#manualDistributorToggle').is(':checked')) {
+                $('#final_distributor').val($('#manual_distributor').val());
+                console.log('Manual distributor selected:', $('#manual_distributor').val());
+            } else {
+                $('#final_distributor').val($('#distributors_select').val());
+                console.log('Selected distributor from dropdown:', $('#distributors_select').val());
+            }
+        });
     });
-});

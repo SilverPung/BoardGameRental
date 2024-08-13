@@ -8,6 +8,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/fetch_bgg_data.js' %}"></script>
 <div id="eventData" data-event-id="{{ event_id }}"></div>
+
 {% endblock extra_head %}
 
 
@@ -33,6 +34,7 @@
     <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
         <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
+            
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">BGG URL:</span>
                 <span class="w-3/4"><input type="url" id="bggUrl" name="bgg_url" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
@@ -41,6 +43,7 @@
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Kod kreskowy:</span>
                 <span class="w-3/4">{{ form.barcode }}</span>
+                <input type="hidden" name="bgg_id" id="bgg_id">
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Tytuł:</span>
@@ -73,12 +76,18 @@
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Opis:</span>
-                <span class="w-3/4">{{ form.description }}</span>
+                <span class="w-3/4">
+                    <input type="checkbox" id="manualDescriptionToggle" class="mr-2 hidden">Ręczny wpis
+                    <input type="text" id="manual_description" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                    <input type="text" id="auto_description" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></input>
+                    <input type="hidden" id="final_description" name="description">
+                </span>
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Top:</span>
                 <span class="w-3/4">{{ form.top }}</span>
             </div>
+            
             <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full">Dodaj</button>
         </form>
     </div>

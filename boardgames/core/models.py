@@ -52,7 +52,14 @@ class Game(models.Model):
     avg_rating = models.FloatField(default=0)
     rating_count = models.IntegerField(default=0)
     top= models.BooleanField(default=False)
-    
+    min_players = models.IntegerField(null=True, blank=True)
+    max_players = models.IntegerField(null=True, blank=True)
+    min_playtime = models.IntegerField(null=True, blank=True)
+    max_playtime = models.IntegerField(null=True, blank=True)
+    categories = models.TextField(null=True, blank=True)
+    mechanics = models.TextField(null=True, blank=True)
+
+
     def save(self,*args, **kwargs):
         self.distributor=self.distributor.capitalize()
         self.title=self.title.capitalize()

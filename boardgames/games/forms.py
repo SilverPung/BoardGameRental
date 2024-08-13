@@ -3,6 +3,9 @@ from core.models import Game, Event
 from django.core.exceptions import ValidationError
 import requests
 from django.core.files.base import ContentFile
+from boardgamegeek import BGGClient
+
+
 atributes = 'form-control rounded-xl py-3 w-full bg-gray-300 pl-2'
 
 
@@ -11,7 +14,7 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url']
+        fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url','min_players', 'max_players', 'min_playtime', 'max_playtime', 'categories', 'mechanics']
 
     title = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Tytuł'}))
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy'}))
@@ -22,6 +25,8 @@ class GameForm(forms.ModelForm):
     accessible = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Dostępne sztuki'}), initial=1, min_value=1, required=False)
     image = forms.ImageField(widget=forms.FileInput(attrs={'placeholder': 'Zdjęcie'}), required=False)
     top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), required=False)
+    bgg_id = forms.CharField(widget=forms.HiddenInput(), required=False)
+
 
     def clean_barcode(self):
         barcode = self.cleaned_data.get('barcode')
@@ -43,6 +48,22 @@ class GameForm(forms.ModelForm):
                 raise ValidationError("Nie można pobrać obrazu z podanego URL.")
         
         return cleaned_data
+    
+    def save(self):
+        game = super().save()
+        if self.cleaned_data.get('bgg_id'):
+            bgg = BGGClient()
+            game.bgg_id = self.cleaned_data.get('bgg_id')
+            bgg_game = bgg.game(game_id=game.bgg_id)
+            game.min_players = bgg_game.min_players
+            game.max_players = bgg_game.max_players
+            game.min_playtime = bgg_game.min_playing_time
+            game.max_playtime = bgg_game.max_playing_time
+            game.categories = ';'.join(bgg_game.categories)
+            game.mechanics = ';'.join(bgg_game.mechanics)
+            game.save()
+        return game
+
 
 class BggForm(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}))
