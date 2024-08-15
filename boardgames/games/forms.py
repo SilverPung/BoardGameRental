@@ -59,8 +59,8 @@ class GameForm(forms.ModelForm):
             game.max_players = bgg_game.max_players
             game.min_playtime = bgg_game.min_playing_time
             game.max_playtime = bgg_game.max_playing_time
-            game.categories = ';'.join(bgg_game.categories)
-            game.mechanics = ';'.join(bgg_game.mechanics)
+            game.categories = '; '.join(bgg_game.categories)
+            game.mechanics = '; '.join(bgg_game.mechanics)
             game.save()
         return game
 
