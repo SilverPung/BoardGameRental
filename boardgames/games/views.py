@@ -124,7 +124,7 @@ def fetch_bgg_data(request):
                 "image": game._image,
                 "distributors": game.publishers if game.publishers else [],
                 "titles": names,
-                "bgg_id": bgg_id,
+                "bgg_id": bgg_id
 
             }
             return JsonResponse(data)
