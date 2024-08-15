@@ -75,13 +75,8 @@
                 <span class="w-3/4">{{ form.quantity }}</span>
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Opis:</span>
-                <span class="w-3/4">
-                    <input type="checkbox" id="manualDescriptionToggle" class="mr-2 hidden">Ręczny wpis
-                    <input type="text" id="manual_description" class="form-control rounded-xl py-3 w-full bg-gray-300">
-                    <input type="text" id="auto_description" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></input>
-                    <input type="hidden" id="final_description" name="description">
-                </span>
+                <span class="text-xl">Uwagi:</span>
+                {{ form.comments }}
             </div>
             <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                 <span class="text-xl">Top:</span>

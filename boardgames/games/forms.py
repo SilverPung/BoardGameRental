@@ -14,11 +14,10 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url','min_players', 'max_players', 'min_playtime', 'max_playtime', 'categories', 'mechanics']
+        fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url','min_players', 'max_players', 'min_playtime', 'max_playtime', 'categories', 'mechanics','comments']
 
     title = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Tytuł'}))
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy'}))
-    description = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-xl py-6 w-full bg-gray-300', 'placeholder': 'Opis'}), required=False)
     distributor = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Dystrybutor'}), required=False)
     event = forms.ModelChoiceField(required=False, queryset=Event.objects.all(), widget=forms.HiddenInput())
     quantity = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Ilość sztuk'}), initial=1, min_value=1)
@@ -26,6 +25,7 @@ class GameForm(forms.ModelForm):
     image = forms.ImageField(widget=forms.FileInput(attrs={'placeholder': 'Zdjęcie'}), required=False)
     top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), required=False)
     bgg_id = forms.CharField(widget=forms.HiddenInput(), required=False)
+    comments = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-xl py-6 w-full bg-gray-300', 'placeholder': 'Komentarz'}), required=False)
 
 
     def clean_barcode(self):
@@ -55,6 +55,7 @@ class GameForm(forms.ModelForm):
             bgg = BGGClient()
             game.bgg_id = self.cleaned_data.get('bgg_id')
             bgg_game = bgg.game(game_id=game.bgg_id)
+            game.description = bgg_game.description
             game.min_players = bgg_game.min_players
             game.max_players = bgg_game.max_players
             game.min_playtime = bgg_game.min_playing_time

@@ -18,6 +18,7 @@ def add_game(request, event_id):
     if request.method == "POST":
         form = GameForm(request.POST, request.FILES)
         if form.is_valid():
+            #print(form.cleaned_data)
             game = form.save()
             game.event = Event.objects.get(id=event_id)
             game.save()
@@ -123,7 +124,6 @@ def fetch_bgg_data(request):
                 "image": game._image,
                 "distributors": game.publishers if game.publishers else [],
                 "titles": names,
-                "description": game.description,
                 "bgg_id": bgg_id,
 
             }

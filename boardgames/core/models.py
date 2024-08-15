@@ -52,7 +52,8 @@ class Game(models.Model):
     avg_rating = models.FloatField(default=0)
     rating_count = models.IntegerField(default=0)
     top= models.BooleanField(default=False)
-    
+    comments= models.TextField(null=True, blank=True)
+
     min_players = models.IntegerField(null=True, blank=True)
     max_players = models.IntegerField(null=True, blank=True)
     min_playtime = models.IntegerField(null=True, blank=True)
