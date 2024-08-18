@@ -38,6 +38,7 @@
         {% csrf_token %}
         <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
             <span class="w-3/4">{{form.query}}</span>
+            <span><input type="hidden" name="form_type" value="search" ></span>
             <span><button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-full">Wyszukaj</button></span>
         </div>
     
@@ -68,6 +69,22 @@
         {% endif %}
     </form>
     
+    <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
+        <h1 class="text-3xl text-center my-4">Zapytaj o grę</h1>
+        
+        <form method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
+            {% csrf_token %}
+            
+                <span>{{similarity_form.description}}</span>
+                <span><input type="hidden" name="form_type" value="similarity"></span>
+                <span class="flex justify-center"><button type="submit" class="bg-gray-700 hover:bg-gray-800 justify-center text-white text-center font-bold my-5 py-3 px-4 rounded-full min-w-fit">Zapytaj</button></span>
+
+    </div>
+    
+
+
+
+
     <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
         <h1 class="text-3xl text-center my-4">Podsumowanie</h1>
         <div class="flex justify-center">

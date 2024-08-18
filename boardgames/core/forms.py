@@ -50,3 +50,5 @@ class SearchForm(forms.Form):
     query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}),required=False, label='' ,initial='')
 
 
+class SimilarityForm(forms.Form):
+    description = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control rounded-xl py-3 w-full bg-gray-300', 'placeholder': 'Opis gry której szukamy'}),required=False, label='Opis')

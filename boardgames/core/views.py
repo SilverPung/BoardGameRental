@@ -1,13 +1,14 @@
 
 from django.shortcuts import render, redirect
 from .models import Event, Game
-from .forms import EventForm, SearchForm, SignupForm
+from .forms import EventForm, SearchForm, SignupForm, SimilarityForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
 from rest_framework import generics
 from .serializers import GameSerializer
-
+import requests
+from django.contrib import messages
 
 
 
@@ -41,21 +42,44 @@ def event_detail(request, event_id):
     event = Event.objects.get(id=event_id)
     games = Game.objects.filter(event=event)
     form = SearchForm()
+    similarityform = SimilarityForm()
 
     if top == 'true':
         games=games.filter(top=True)
 
     if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            query = form.cleaned_data['query']
-            games = Game.objects.filter(
-                Q(title__icontains=query) | Q(barcode__icontains=query),
-                event=event 
-            )
-            iterator = 0
-        else:
-            games = Game.objects.filter(event=event)
+        form_type = request.POST.get("form_type", None)
+        if form_type == 'search':
+            form = SearchForm(request.POST)
+            if form.is_valid():
+                query = form.cleaned_data['query']
+                games = Game.objects.filter(
+                    Q(title__icontains=query) | Q(barcode__icontains=query),
+                    event=event 
+                )
+                iterator = 0
+            else:
+                games = Game.objects.filter(event=event)
+        elif form_type == 'similarity':
+            
+            similarityform = SimilarityForm(request.POST)
+            
+            
+            if similarityform.is_valid():
+                print(similarityform.cleaned_data)
+                
+                payload = similarityform.cleaned_data 
+                payload.update({'event_id': event_id})
+                try:
+                    
+                    response = requests.post('http://127.0.0.1:5000/boardgames/similarity/', json=payload)
+                    if response.status_code == 200:
+                        pass
+                    else:
+                        pass
+                except requests.exceptions.RequestException as e:
+                    messages.error(request, 'Wystąpił błąd podczas łączenia z serwerem.')
+                    return render(request, 'core/event_detail.html', {'event': event, 'form': form, 'similarityform': similarityform})
     start_index = iterator * 5
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
@@ -63,7 +87,8 @@ def event_detail(request, event_id):
     return render(request, 'core/event_detail.html', {'event': event, 'form': form,
                                                       'top_games': top_games, 
                                                       'iterator': iterator, 
-                                                      'max_iterator': max_iterator})
+                                                      'max_iterator': max_iterator,
+                                                      'similarity_form': similarityform})
 
 @login_required
 def summary(request,event_id):
