@@ -43,7 +43,6 @@ class Game(models.Model):
     barcode = models.CharField(max_length=20, unique=True)
     title = models.CharField(max_length=100)
     distributor = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE,default=None, blank=True,null=True)
     image = models.ImageField(upload_to='images/', null=True, blank=True)
     accessible = models.IntegerField(null=True, blank=True)
@@ -60,6 +59,7 @@ class Game(models.Model):
     max_playtime = models.IntegerField(null=True, blank=True)
     categories = models.TextField(null=True, blank=True)
     mechanics = models.TextField(null=True, blank=True)
+    complexity = models.FloatField(null=True, blank=True)
 
 
     def save(self,*args, **kwargs):

@@ -14,7 +14,7 @@ class GameForm(forms.ModelForm):
 
     class Meta:
         model = Game
-        fields = ['title', 'barcode', 'distributor', 'description', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url','min_players', 'max_players', 'min_playtime', 'max_playtime', 'categories', 'mechanics','comments']
+        fields = ['title', 'barcode', 'distributor', 'complexity', 'event', 'quantity', 'image', 'accessible', 'top', 'image_url','min_players', 'max_players', 'min_playtime', 'max_playtime', 'categories', 'mechanics','comments']
 
     title = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Tytuł'}))
     barcode = forms.CharField(widget=forms.TextInput(attrs={'class': atributes, 'placeholder': 'Kod kreskowy'}))
@@ -55,11 +55,12 @@ class GameForm(forms.ModelForm):
             bgg = BGGClient()
             game.bgg_id = self.cleaned_data.get('bgg_id')
             bgg_game = bgg.game(game_id=game.bgg_id)
-            game.description = bgg_game.description
+            game.complexity = bgg_game.rating_average_weight
             game.min_players = bgg_game.min_players
             game.max_players = bgg_game.max_players
             game.min_playtime = bgg_game.min_playing_time
             game.max_playtime = bgg_game.max_playing_time
+            
             game.categories = '; '.join(bgg_game.categories)
             game.mechanics = '; '.join(bgg_game.mechanics)
             game.save()
