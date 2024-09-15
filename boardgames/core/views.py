@@ -30,6 +30,10 @@ def home(request):
 def event_detail(request, event_id):
     action = request.GET.get('action')
     top = request.GET.get('top')
+    min_players = request.GET.get('min_players')
+    max_players = request.GET.get('max_players')
+    min_playtime = request.GET.get('min_time')
+    max_playtime = request.GET.get('max_time')
     iterator = int(request.GET.get('iterator', 0)) 
 
     if action == 'increment':
@@ -47,6 +51,16 @@ def event_detail(request, event_id):
 
     if top == 'true':
         games=games.filter(top=True)
+    if min_players:
+        games=games.filter(Q(max_players__gte=int(min_players) )| Q(max_players__isnull=True))
+    if max_players:
+        games=games.filter(Q(min_players__lte=int(max_players)) | Q(min_players__isnull=True))
+    if min_playtime:
+        games=games.filter(Q(min_playtime__gte=int(min_playtime)) & Q(max_playtime__isnull=False))
+    if max_playtime:
+        games=games.filter(Q(max_playtime__lte=int(max_playtime)) & Q(min_playtime__isnull=False))
+    
+    
 
     if request.method == 'POST':
         form_type = request.POST.get("form_type", None)
@@ -54,13 +68,13 @@ def event_detail(request, event_id):
             form = SearchForm(request.POST)
             if form.is_valid():
                 query = form.cleaned_data['query']
-                games = Game.objects.filter(
+                games = games.filter(
                     Q(title__icontains=query) | Q(barcode__icontains=query),
                     event=event 
                 )
                 iterator = 0
             else:
-                games = Game.objects.filter(event=event)
+                games = games.filter(event=event)
         elif form_type == 'similarity':
             
             similarityform = SimilarityForm(request.POST)

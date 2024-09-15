@@ -13,6 +13,27 @@
                         {% if request.GET.top == 'true' %}checked{% endif %}>
                     Top
                 </label>
+                <label class=" mt-3 block">
+                    Min graczy
+                    <input type="number" name="min_players" min="0" class="mt-1 w-1/2 rounded-lg"
+                    {% if request.GET.min_players %} value={{request.GET.min_players}} {% endif %}>
+                </label>
+                <label class=" mt-3 block">
+                    Max graczy
+                    <input type="number" name="max_players" min="0" class="mt-1 w-1/2 rounded-lg"
+                    {% if request.GET.max_players %}value={{request.GET.max_players}} {% endif %}>
+                </label>
+                <label class=" mt-3 block">
+                    Min czas
+                    <input type="number" name="min_time" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
+                    {% if request.GET.min_time %}value={{request.GET.min_time}} {% endif %}>
+                </label>
+                <label class=" mt-3 block">
+                    Max czas
+                    <input type="number" name="max_time" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
+                    {% if request.GET.max_time %}value={{request.GET.max_time}} {% endif %}>
+                </label>
+
                 <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full mt-4">
                     Fitruj
                 </button>
@@ -58,6 +79,18 @@
         <input name="iterator" type="hidden" value="{{ iterator }}">
         {% if request.GET.top %}
             <input type="hidden" name="top" value="{{ request.GET.top }}">
+        {% endif %}
+        {% if request.GET.min_players %}
+            <input type="hidden" name="min_players" value="{{ request.GET.min_players }}">
+        {% endif %}
+        {% if request.GET.max_players %}
+            <input type="hidden" name="max_players" value="{{ request.GET.max_players }}">
+        {% endif %}
+        {% if request.GET.min_time %}
+            <input type="hidden" name="min_time" value="{{ request.GET.min_time }}">
+        {% endif %}
+        {% if request.GET.max_time %}
+            <input type="hidden" name="max_time" value="{{ request.GET.max_time }}">
         {% endif %}
 
         {% if iterator > 0 %}

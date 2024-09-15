@@ -26,6 +26,10 @@ class GameForm(forms.ModelForm):
     top = forms.BooleanField(widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}), required=False)
     bgg_id = forms.CharField(widget=forms.HiddenInput(), required=False)
     comments = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-xl py-6 w-full bg-gray-300', 'placeholder': 'Komentarz'}), required=False)
+    min_players = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Minimalna liczba graczy'}), required=False)
+    max_players = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Maksymalna liczba graczy'}), required=False)
+    min_playtime = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Minimalny czas gry'}), required=False)
+    max_playtime = forms.IntegerField(widget=forms.NumberInput(attrs={'class': atributes, 'placeholder': 'Maksymalny czas gry'}), required=False)
 
 
     def clean_barcode(self):
