@@ -9,6 +9,7 @@ from rest_framework import generics
 from .serializers import GameSerializer
 import requests
 from django.contrib import messages
+from django.conf import settings
 
 
 
@@ -88,7 +89,8 @@ def event_detail(request, event_id):
                                                       'top_games': top_games, 
                                                       'iterator': iterator, 
                                                       'max_iterator': max_iterator,
-                                                      'similarity_form': similarityform})
+                                                      'similarity_form': similarityform,
+                                                      'beta': settings.BETA})
 
 @login_required
 def summary(request,event_id):
