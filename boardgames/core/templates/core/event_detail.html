@@ -10,32 +10,35 @@
             <form method="get" action="">
                 <label class=" mt-3 block">
                     <input type="checkbox" name="top" value="true" class="mr-2"
-                        {% if request.GET.top == 'true' %}checked{% endif %}>
+                        {% if top == 'true' %}checked{% endif %}>
                     Top
                 </label>
                 <label class=" mt-3 block">
                     Min graczy
                     <input type="number" name="min_players" min="0" class="mt-1 w-1/2 rounded-lg"
-                    {% if request.GET.min_players %} value={{request.GET.min_players}} {% endif %}>
+                    {% if min_players %} value={{min_players}} {% endif %}>
                 </label>
                 <label class=" mt-3 block">
                     Max graczy
                     <input type="number" name="max_players" min="0" class="mt-1 w-1/2 rounded-lg"
-                    {% if request.GET.max_players %}value={{request.GET.max_players}} {% endif %}>
+                    {% if max_players %}value={{max_players}} {% endif %}>
                 </label>
                 <label class=" mt-3 block">
                     Min czas
-                    <input type="number" name="min_time" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
-                    {% if request.GET.min_time %}value={{request.GET.min_time}} {% endif %}>
+                    <input type="number" name="min_playtime" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
+                    {% if min_playtime %}value={{min_playtime}} {% endif %}>
                 </label>
                 <label class=" mt-3 block">
                     Max czas
-                    <input type="number" name="max_time" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
-                    {% if request.GET.max_time %}value={{request.GET.max_time}} {% endif %}>
+                    <input type="number" name="max_playtime" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
+                    {% if max_playtime %}value={{max_playtime}} {% endif %}>
                 </label>
 
                 <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full mt-4">
                     Fitruj
+                </button>
+                <button type="submit" name="reset" value="true" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full mt-4">
+                    Reset
                 </button>
             </form>
         </div>
@@ -77,29 +80,30 @@
 
     <form method="get" action="{% url 'core:event_detail' event.id %}" class="flex justify-center  mt-2 mx-72">
         <input name="iterator" type="hidden" value="{{ iterator }}">
-        {% if request.GET.top %}
-            <input type="hidden" name="top" value="{{ request.GET.top }}">
+        {% if top %}
+            <input type="hidden" name="top" value="{{ top }}">
         {% endif %}
-        {% if request.GET.min_players %}
-            <input type="hidden" name="min_players" value="{{ request.GET.min_players }}">
+        {% if min_players %}
+            <input type="hidden" name="min_players" value="{{ min_players }}">
         {% endif %}
-        {% if request.GET.max_players %}
-            <input type="hidden" name="max_players" value="{{ request.GET.max_players }}">
+        {% if max_players %}
+            <input type="hidden" name="max_players" value="{{ max_players }}">
         {% endif %}
-        {% if request.GET.min_time %}
-            <input type="hidden" name="min_time" value="{{ request.GET.min_time }}">
+        {% if min_playtime %}
+            <input type="hidden" name="min_playtime" value="{{ min_playtime }}">
         {% endif %}
-        {% if request.GET.max_time %}
-            <input type="hidden" name="max_time" value="{{ request.GET.max_time }}">
+        {% if max_playtime %}
+            <input type="hidden" name="max_playtime" value="{{ max_playtime }}">
         {% endif %}
 
         {% if iterator > 0 %}
             <button type="submit" name="action" value="decrement" class="mt-2 px-8 py-4 bg-red-600 text-white rounded-xl inline-block"><--</button>
         {% endif %}
-        <h1 class="mt-2 px-8 py-4 bg-gray-500 text-white rounded-xl inline-block">{{iterator}}</h1>  
+        <h1 class="mt-2 px-8 py-4 bg-gray-500 text-white rounded-xl inline-block">{{iterator}} / {{max_iterator }}</h1>  
         {% if iterator < max_iterator %}
             <button type="submit" name="action" value="increment" class="mt-2 px-8 py-4 bg-green-600 text-white rounded-xl inline-block">--></button>
         {% endif %}
+        
     </form>
     
     {% if beta == true %}

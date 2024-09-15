@@ -32,9 +32,10 @@ def event_detail(request, event_id):
     top = request.GET.get('top')
     min_players = request.GET.get('min_players')
     max_players = request.GET.get('max_players')
-    min_playtime = request.GET.get('min_time')
-    max_playtime = request.GET.get('max_time')
+    min_playtime = request.GET.get('min_playtime')
+    max_playtime = request.GET.get('max_playtime')
     iterator = int(request.GET.get('iterator', 0)) 
+    reset = request.GET.get('reset')
 
     if action == 'increment':
         iterator += 1
@@ -48,17 +49,23 @@ def event_detail(request, event_id):
     games = Game.objects.filter(event=event)
     form = SearchForm()
     similarityform = SimilarityForm()
-
-    if top == 'true':
-        games=games.filter(top=True)
-    if min_players:
-        games=games.filter(Q(max_players__gte=int(min_players) )| Q(max_players__isnull=True))
-    if max_players:
-        games=games.filter(Q(min_players__lte=int(max_players)) | Q(min_players__isnull=True))
-    if min_playtime:
-        games=games.filter(Q(min_playtime__gte=int(min_playtime)) & Q(max_playtime__isnull=False))
-    if max_playtime:
-        games=games.filter(Q(max_playtime__lte=int(max_playtime)) & Q(min_playtime__isnull=False))
+    if reset == 'true':
+        min_players = None
+        max_players = None
+        min_playtime = None
+        max_playtime = None
+        top = False
+    else:
+        if top == 'true':
+            games=games.filter(top=True)
+        if min_players:
+            games=games.filter(Q(max_players__gte=int(min_players) )| Q(max_players__isnull=True))
+        if max_players:
+            games=games.filter(Q(min_players__lte=int(max_players)) | Q(min_players__isnull=True))
+        if min_playtime:
+            games=games.filter(Q(min_playtime__gte=int(min_playtime)) | Q(max_playtime__isnull=True))
+        if max_playtime:
+            games=games.filter(Q(max_playtime__lte=int(max_playtime)) | Q(min_playtime__isnull=True))
     
     
 
@@ -99,12 +106,11 @@ def event_detail(request, event_id):
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
     max_iterator = (games.count()-1) // 5
-    return render(request, 'core/event_detail.html', {'event': event, 'form': form,
-                                                      'top_games': top_games, 
-                                                      'iterator': iterator, 
-                                                      'max_iterator': max_iterator,
-                                                      'similarity_form': similarityform,
-                                                      'beta': settings.BETA})
+    context={'event': event, 'form': form, 'top_games': top_games, 'iterator': iterator, 
+             'max_iterator': max_iterator, 'similarity_form': similarityform, 'beta': settings.BETA, 
+             'min_players': min_players, 'max_players': max_players, 'min_playtime': min_playtime, 
+             'max_playtime': max_playtime, 'top': top}
+    return render(request, 'core/event_detail.html', context=context)
 
 @login_required
 def summary(request,event_id):
