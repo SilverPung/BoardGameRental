@@ -1,8 +1,12 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
 {% block title %}{{game.title|capfirst}}{% endblock title %}
 
 {% block extra_head %}
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/advanced_settings.js' %}"></script>
     <script>
         function confirmDelete(event) {
             if (!confirm("Czy jesteś pewien, że chcesz usunąć tę grę?")) {
@@ -69,52 +73,64 @@
         <h1 class="text-3xl text-center mt-4">Edytuj grę</h1>
         <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
-            <input type="hidden" name="form_type" value="edit_game" />
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Kod kreskowy:</span>
-                <span class="w-3/4">{{form.barcode}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Tytuł:</span>
-                <span class="w-3/4">{{form.title}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Obraz:</span>
-                <span class="w-3/4">{{form.image}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Dystrybutor:</span>
-                <span class="w-3/4">{{form.distributor}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Dostępnych/w Systemie:</span>
-                <span class="mr-2">{{form.accessible}}</span>
-                <span class="">{{form.quantity}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Uwagi:</span>
-                <span class="w-3/4">{{form.comments}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Top:</span>
-                <span class="w-3/4">{{form.top}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Min graczy:</span>
-                <span class="w-3/4">{{form.min_players}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Max graczy:</span>
-                <span class="w-3/4">{{form.max_players}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Min czas:</span>
-                <span class="w-3/4">{{form.min_playtime}}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Max czas:</span>
-                <span class="w-3/4">{{form.max_playtime}}</span>
-            </div>
+            <fieldset>
+                <legend class="text-2xl font-bold text-center justify-center">Podstawowe informacje</legend>
+                <input type="hidden" name="form_type" value="edit_game" />
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Kod kreskowy:</span>
+                    <span class="w-3/4">{{form.barcode}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Tytuł:</span>
+                    <span class="w-3/4">{{form.title}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Obraz:</span>
+                    <span class="w-3/4">{{form.image}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Dystrybutor:</span>
+                    <span class="w-3/4">{{form.distributor}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Dostępnych/w Systemie:</span>
+                    <span class="mr-2">{{form.accessible}}</span>
+                    <span class="">{{form.quantity}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Uwagi:</span>
+                    <span class="w-3/4">{{form.comments}}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Top:</span>
+                    <span class="w-3/4">{{form.top}}</span>
+                </div>
+            </fieldset>
+            
+            <button type="button" class="my-3 text-lg " id="toggle-button" onclick="toggleAdvancedSettings()">Pokaż Zaawansowane Ustawienia</button>
+
+            <!-- Advanced settings section -->
+            <fieldset id="advanced-settings" class="mb-4 p-4 border border-gray-300 rounded hidden">
+                <legend class="text-xl font-medium mb-2">Zaawansowane informacje</legend>
+   
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Min Graczy</span>
+                        <span class="w-3/4">{{form.min_players}}</span>
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Max Graczy</span>
+                        <span class="w-3/4">{{form.max_players}}</span> 
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Minimalny czas gry</span>
+                        <span class="w-3/4">{{form.min_playtime}}</span>
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Maksymalny czas gry</span>
+                        <spa class="w-3/4">{{form.max_playtime}}</span>
+                    </div>
+                    
+            </fieldset>
             <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full">Zapisz</button>
         </div>
 

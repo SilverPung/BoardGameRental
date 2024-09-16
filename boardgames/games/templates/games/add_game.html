@@ -7,20 +7,7 @@
 {% block extra_head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/fetch_bgg_data.js' %}"></script>
-
-    <script>
-        function toggleAdvancedSettings() {
-            const advancedSettings = document.getElementById('advanced-settings');
-            const toggleButton = document.getElementById('toggle-button');
-            if (advancedSettings.classList.contains('hidden')) {
-                advancedSettings.classList.remove('hidden');
-                toggleButton.textContent = 'Schowaj Zaawansowane Ustawienia';
-            } else {
-                advancedSettings.classList.add('hidden');
-                toggleButton.textContent = 'Pokaż Zaawansowane Ustawienia';
-            }
-        }
-    </script>
+<script src="{% static 'js/advanced_settings.js' %}"></script>
 <div id="eventData" data-event-id="{{ event_id }}"></div>
 
 {% endblock extra_head %}
