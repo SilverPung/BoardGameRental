@@ -7,18 +7,9 @@
     
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="{% static 'js/advanced_settings.js' %}"></script>
-    <script>
-        function confirmDelete(event) {
-            if (!confirm("Czy jesteś pewien, że chcesz usunąć tę grę?")) {
-                event.preventDefault();
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            var deleteButton = document.getElementById('delete-game-button');
-            deleteButton.addEventListener('click', confirmDelete);
-        });
-    </script>
+    <script src="{% static 'js/edit_game.js' %}"></script>
+    
+        
 {% endblock extra_head %}
 
 {% block content %}
@@ -94,8 +85,12 @@
                 </div>
                 <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                     <span class="text-xl">Dostępnych/w Systemie:</span>
-                    <span class="mr-2">{{form.accessible}}</span>
-                    <span class="">{{form.quantity}}</span>
+                    <span class="mr-2">
+                        <input type="number" min="0" id="accessible"  name="accessible" value="{{game.accessible}}" class="form-control rounded-xl py-3 w-1/4 bg-gray-300">
+                    </span>
+                    <span class="">
+                        <input type="number" min="0" id="quantity" name="quantity" value="{{game.quantity}}" class="form-control rounded-xl py-3 w-1/4 bg-gray-300">
+                    </span>
                 </div>
                 <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
                     <span class="text-xl">Uwagi:</span>
