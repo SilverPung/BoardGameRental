@@ -120,11 +120,19 @@ def fetch_bgg_data(request):
             game = bgg.game(game_id=bgg_id)
             names = game.alternative_names if game.alternative_names else []
             names.insert(0, game.name)
+            max_players = game.max_players
+            min_players = game.min_players
+            max_playtime = game.max_playing_time
+            min_playtime = game.min_playing_time
             data = {
                 "image": game._image,
                 "distributors": game.publishers if game.publishers else [],
                 "titles": names,
-                "bgg_id": bgg_id
+                "bgg_id": bgg_id,
+                "max_players": max_players,
+                "min_players": min_players,
+                "max_playtime": max_playtime,
+                "min_playtime": min_playtime
 
             }
             return JsonResponse(data)

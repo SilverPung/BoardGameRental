@@ -60,10 +60,7 @@ class GameForm(forms.ModelForm):
             game.bgg_id = self.cleaned_data.get('bgg_id')
             bgg_game = bgg.game(game_id=game.bgg_id)
             game.complexity = bgg_game.rating_average_weight
-            game.min_players = bgg_game.min_players
-            game.max_players = bgg_game.max_players
-            game.min_playtime = bgg_game.min_playing_time
-            game.max_playtime = bgg_game.max_playing_time
+            
             
             game.categories = '; '.join(bgg_game.categories)
             game.mechanics = '; '.join(bgg_game.mechanics)

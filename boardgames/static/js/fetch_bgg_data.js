@@ -16,6 +16,13 @@ $(document).ready(function() {
                     $('#titles_select').empty();
                     $('#distributors_select').empty();
                     $('#bgg_id').val(data.bgg_id);
+                    $('#min_players').val(data.min_players);
+                    $('#max_players').val(data.max_players);
+                    $('#min_playtime').val(data.min_playtime);
+                    $('#max_playtime').val(data.max_playtime);
+
+                    console.log('Data:', data);  // Debugging log
+
 
                     // Populate 'titles_select'
                     data.titles.forEach(function(title) {
@@ -26,6 +33,11 @@ $(document).ready(function() {
                     data.distributors.forEach(function(distributor) {
                         $('#distributors_select').append($('<option>').val(distributor).text(distributor));
                     });
+                    
+                    // Set the fetched values for players and playtime in the form
+                    
+
+
 
 
 
@@ -142,4 +154,7 @@ $(document).ready(function() {
         console.log('Final title:', $('#final_title').val());
         console.log('Final distributor:', $('#final_distributor').val());
     });
+    
+
+
 });

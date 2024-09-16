@@ -7,6 +7,20 @@
 {% block extra_head %}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="{% static 'js/fetch_bgg_data.js' %}"></script>
+
+    <script>
+        function toggleAdvancedSettings() {
+            const advancedSettings = document.getElementById('advanced-settings');
+            const toggleButton = document.getElementById('toggle-button');
+            if (advancedSettings.classList.contains('hidden')) {
+                advancedSettings.classList.remove('hidden');
+                toggleButton.textContent = 'Schowaj Zaawansowane Ustawienia';
+            } else {
+                advancedSettings.classList.add('hidden');
+                toggleButton.textContent = 'Pokaż Zaawansowane Ustawienia';
+            }
+        }
+    </script>
 <div id="eventData" data-event-id="{{ event_id }}"></div>
 
 {% endblock extra_head %}
@@ -34,54 +48,89 @@
     <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
         <form method="post" enctype="multipart/form-data" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
             {% csrf_token %}
-            
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">BGG URL:</span>
-                <span class="w-3/4"><input type="url" id="bggUrl" name="bgg_url" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
-                <button type="button" id="fetchData" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 ml-4 rounded-full">Wczytaj</button>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Kod kreskowy:</span>
-                <span class="w-3/4">{{ form.barcode }}</span>
-                <input type="hidden" name="bgg_id" id="bgg_id">
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Tytuł:</span>
-                <span class="w-3/4">
-                    <input type="checkbox" id="manualTitleToggle" class="mr-2 hidden">Ręczny wpis
-                    <input type="text" id="manual_title" class="form-control rounded-xl py-3 w-full bg-gray-300">
-                    <select id="titles_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
-                    <input type="hidden" id="final_title" name="title">
-                </span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Dystrybutor:</span>
-                <span class="w-3/4">
-                    <input type="checkbox" id="manualDistributorToggle" class="mr-2 hidden">Ręczny wpis
-                    <input type="text" id="manual_distributor" class="form-control rounded-xl py-3 w-full bg-gray-300">
-                    <div id="manual_distributor_suggestions" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></div>
-                    <select id="distributors_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
-                    <input type="hidden" id="final_distributor" name="distributor">
-                </span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Obraz:</span>
-                <span class="w-3/4">
-                    <input type="text" id="id_image" name="image_url" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></span>
-                    {{form.image}}
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Ilość sztuk:</span>
-                <span class="w-3/4">{{ form.quantity }}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Uwagi:</span>
-                <span class="w-3/4">{{ form.comments }}</span>
-            </div>
-            <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
-                <span class="text-xl">Top:</span>
-                <span class="w-3/4">{{ form.top }}</span>
-            </div>
+            <fieldset class="flex flex-col justify-center bg-slate-200 mt-10 mx-5">
+                <legend class="text-2xl font-bold text-center justify-center">Podstawowe informacje</legend>   
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">BGG URL:</span>
+                    <span class="w-3/4"><input type="url" id="bggUrl" name="bgg_url" class="form-control rounded-xl py-3 w-full bg-gray-300"></span>
+                    <button type="button" id="fetchData" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 ml-4 rounded-full">Wczytaj</button>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Kod kreskowy:</span>
+                    <span class="w-3/4">{{ form.barcode }}</span>
+                    <input type="hidden" name="bgg_id" id="bgg_id">
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Tytuł:</span>
+                    <span class="w-3/4">
+                        <input type="checkbox" id="manualTitleToggle" class="mr-2 hidden">Ręczny wpis
+                        <input type="text" id="manual_title" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                        <select id="titles_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
+                        <input type="hidden" id="final_title" name="title">
+                    </span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Dystrybutor:</span>
+                    <span class="w-3/4">
+                        <input type="checkbox" id="manualDistributorToggle" class="mr-2 hidden">Ręczny wpis
+                        <input type="text" id="manual_distributor" class="form-control rounded-xl py-3 w-full bg-gray-300">
+                        <div id="manual_distributor_suggestions" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></div>
+                        <select id="distributors_select" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></select>
+                        <input type="hidden" id="final_distributor" name="distributor">
+                    </span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Obraz:</span>
+                    <span class="w-3/4">
+                        <input type="text" id="id_image" name="image_url" class="form-control rounded-xl py-3 w-full bg-gray-300 hidden"></span>
+                        {{form.image}}
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Ilość sztuk:</span>
+                    <span class="w-3/4">{{ form.quantity }}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Uwagi:</span>
+                    <span class="w-3/4">{{ form.comments }}</span>
+                </div>
+                <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                    <span class="text-xl">Top:</span>
+                    <span class="w-3/4">{{ form.top }}</span>
+                </div>
+            </fieldset>
+                
+            <button type="button" class="my-3 text-lg " id="toggle-button" onclick="toggleAdvancedSettings()">Pokaż Zaawansowane Ustawienia</button>
+
+            <!-- Advanced settings section -->
+            <fieldset id="advanced-settings" class="mb-4 p-4 border border-gray-300 rounded hidden">
+                <legend class="text-xl font-medium mb-2">Zaawansowane informacje</legend>
+   
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Min Graczy</span>
+                        <span class="w-3/4">
+                            <input type="number" name="min_players" id="min_players" class="form-control rounded-xl py-3 w-full bg-gray-300">    
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Max Graczy</span>
+                        <span class="w-3/4">
+                            <input type="number" name="max_players" id="max_players" class="form-control rounded-xl py-3 w-full bg-gray-300">    
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Minimalny czas gry</span>
+                        <span class="w-3/4">
+                            <input type="number" name="min_playtime" id="min_playtime" class="form-control rounded-xl py-3 w-full bg-gray-300">    
+                        </span>
+                    </div>
+                    <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
+                        <span class="text-xl">Maksymalny czas gry</span>
+                        <span class="w-3/4">
+                            <input type="number" name="max_playtime" id="max_playtime" class="form-control rounded-xl py-3 w-full bg-gray-300">    
+                        </span>
+                    </div>
+                    
+            </fieldset>
             
             <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold my-5 py-3 px-4 rounded-full">Dodaj</button>
         </form>
