@@ -47,7 +47,7 @@ class SignupForm(UserCreationForm):
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class': login_atributes, 'placeholder': 'Hasło'}))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class': login_atributes, 'placeholder': 'Potwierdź Hasło'}))
 class SearchForm(forms.Form):
-    query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-l py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}),required=False, label='' ,initial='')
+    query = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control rounded-lg py-3 px-48 w-full bg-gray-300', 'placeholder': 'Wyszukaj'}),required=False, label='' ,initial='')
 
 
 class SimilarityForm(forms.Form):

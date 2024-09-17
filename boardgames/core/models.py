@@ -79,6 +79,7 @@ class Game(models.Model):
                 self.list_of_renters.add(renter)
                 self.accessible -= 1
                 renter.how_many_games += 1
+                renter.list_of_games.add(self)
                 renter.save()
                 self.save()
                 
@@ -88,10 +89,26 @@ class Game(models.Model):
             renter.event = self.event
             renter.save()
             renter.how_many_games += 1
+            renter.list_of_games.add(self)
             renter.save()
             self.list_of_renters.add(renter)
             self.accessible -= 1
             self.save()
+
+    def remove_renter(self, id,rating=0):
+        if renter := Renter.objects.filter(id=id).first():
+            if self.list_of_renters.filter(id=renter.id).exists():
+                self.list_of_renters.remove(renter)
+                self.accessible += 1
+                renter.how_many_games -= 1
+                renter.list_of_games.remove(self)
+                renter.save()
+                self.save()
+                if rating !=0:
+                    self.add_rating(rating)
+                print("Renter removed")
+        else:
+            raise ValidationError("Nie ma takiego wypożyczenia")
     
     def add_rating(self, rating):
         self.avg_rating = (self.avg_rating * self.rating_count + float(rating)) / (self.rating_count + 1)

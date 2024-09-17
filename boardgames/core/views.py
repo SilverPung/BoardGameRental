@@ -1,6 +1,6 @@
 
-from django.shortcuts import render, redirect
-from .models import Event, Game
+from django.shortcuts import render, redirect,get_object_or_404
+from .models import Event, Game, Renter
 from .forms import EventForm, SearchForm, SignupForm, SimilarityForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
@@ -10,6 +10,7 @@ from .serializers import GameSerializer
 import requests
 from django.contrib import messages
 from django.conf import settings
+from django.http import Http404
 
 
 
@@ -36,6 +37,7 @@ def event_detail(request, event_id):
     max_playtime = request.GET.get('max_playtime')
     iterator = int(request.GET.get('iterator', 0)) 
     reset = request.GET.get('reset')
+    context = {}
 
     if action == 'increment':
         iterator += 1
@@ -71,7 +73,8 @@ def event_detail(request, event_id):
 
     if request.method == 'POST':
         form_type = request.POST.get("form_type", None)
-        if form_type == 'search':
+
+        if form_type == 'search':#game search
             form = SearchForm(request.POST)
             if form.is_valid():
                 query = form.cleaned_data['query']
@@ -82,7 +85,7 @@ def event_detail(request, event_id):
                 iterator = 0
             else:
                 games = games.filter(event=event)
-        elif form_type == 'similarity':
+        elif form_type == 'similarity':# beta version for game search based on text analysis
             
             similarityform = SimilarityForm(request.POST)
             
@@ -101,15 +104,28 @@ def event_detail(request, event_id):
                         pass
                 except requests.exceptions.RequestException as e:
                     messages.error(request, 'Wystąpił błąd podczas łączenia z serwerem.')
-                    return render(request, 'core/event_detail.html', {'event': event, 'form': form, 'similarityform': similarityform})
+                
+        elif form_type == 'renter_search': #renter search
+            query = request.POST.get('renter')
+            
+            try:
+                renter = get_object_or_404(Renter, barcode=str(query), event=event)
+
+
+            except Http404:
+                messages.error(request, 'Nie znaleziono użytkownika o podanym numerze karty.')
+            
+            else:
+                return redirect('core:renter_detail', renter.id)
+                    
     start_index = iterator * 5
     end_index = start_index + 5
     top_games = games.order_by('title')[start_index:end_index]
     max_iterator = (games.count()-1) // 5
-    context={'event': event, 'form': form, 'top_games': top_games, 'iterator': iterator, 
+    context.update({'event': event, 'form': form, 'top_games': top_games, 'iterator': iterator, 
              'max_iterator': max_iterator, 'similarity_form': similarityform, 'beta': settings.BETA, 
              'min_players': min_players, 'max_players': max_players, 'min_playtime': min_playtime, 
-             'max_playtime': max_playtime, 'top': top}
+             'max_playtime': max_playtime, 'top': top})
     return render(request, 'core/event_detail.html', context=context)
 
 @login_required
@@ -137,6 +153,15 @@ def logout_view(request):
     
     return render(request, 'core/logout.html')
 
+@login_required
+def renter_detail(request, renter_id):
+    limit=settings.LIMIT_OF_RENTED_GAMES
+    renter = get_object_or_404(Renter, id=renter_id)
+    games=[]
+    for game in renter.list_of_games.all():
+        games.append(game)
+    return render(request, 'core/renter_detail.html', {'renter': renter,'games':games,'limit':limit})
+
 
 def signup(request):
     if request.method == 'POST':
@@ -147,6 +172,7 @@ def signup(request):
     else:
         form = SignupForm()
     return render(request, 'core/signup.html', {'form': form})
+
 
 
 def custom_page_not_found(request, exception):

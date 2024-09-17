@@ -52,12 +52,15 @@
 
     {% include 'core/messages.html' %}
 
+    <!-- Event title -->
     <div class="flex mx-20 mt-10  rounded-xl justify-center bg-slate-200 flex-col items-center">
         <div>
             <h1 class="text-3xl font-bold my-3 mt-5">{{ event.title|capfirst }}</h1>
         </div>
     </div>
     
+
+    <!-- Search form -->
     <form action="" method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
         {% csrf_token %}
         <div class="flex justify-between py-4 mx-5 border-b-2 border-gray-400" >
@@ -69,6 +72,7 @@
             
     </form>
 
+    <!-- Games output -->
     <div class="flex flex-col justify-center bg-slate-200 mt-2 mx-72">
         {% for game in top_games %}
             <a href="{% url 'games:edit_game' game.id %}" class="flex justify-between py-4 mx-5 border-b-2 border-gray-400">
@@ -78,24 +82,31 @@
         {% endfor %}
     </div>
 
+
+    <!-- Pagination -->
     <form method="get" action="{% url 'core:event_detail' event.id %}" class="flex justify-center  mt-2 mx-72">
         <input name="iterator" type="hidden" value="{{ iterator }}">
-        {% if top %}
-            <input type="hidden" name="top" value="{{ top }}">
-        {% endif %}
-        {% if min_players %}
-            <input type="hidden" name="min_players" value="{{ min_players }}">
-        {% endif %}
-        {% if max_players %}
-            <input type="hidden" name="max_players" value="{{ max_players }}">
-        {% endif %}
-        {% if min_playtime %}
-            <input type="hidden" name="min_playtime" value="{{ min_playtime }}">
-        {% endif %}
-        {% if max_playtime %}
-            <input type="hidden" name="max_playtime" value="{{ max_playtime }}">
-        {% endif %}
-
+        
+        <!-- Hidden inputs for filtering -->
+        <div>
+            {% if top %}
+                <input type="hidden" name="top" value="{{ top }}">
+            {% endif %}
+            {% if min_players %}
+                <input type="hidden" name="min_players" value="{{ min_players }}">
+            {% endif %}
+            {% if max_players %}
+                <input type="hidden" name="max_players" value="{{ max_players }}">
+            {% endif %}
+            {% if min_playtime %}
+                <input type="hidden" name="min_playtime" value="{{ min_playtime }}">
+            {% endif %}
+            {% if max_playtime %}
+                <input type="hidden" name="max_playtime" value="{{ max_playtime }}">
+            {% endif %}
+        </div>
+        
+        
         {% if iterator > 0 %}
             <button type="submit" name="action" value="decrement" class="mt-2 px-8 py-4 bg-red-600 text-white rounded-xl inline-block"><--</button>
         {% endif %}
@@ -106,28 +117,48 @@
         
     </form>
     
-    {% if beta == true %}
-        
-    
-        
-    <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
-        <h1 class="text-3xl text-center my-4">Zapytaj o grę</h1>
-        
-        <form method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
-            {% csrf_token %}
+    <!-- Similarity block for further development --> 
+    <div>
+        {% if beta == true %}
             
-                <span>{{similarity_form.description}}</span>
-                <span><input type="hidden" name="form_type" value="similarity"></span>
-                <span class="flex justify-center"><button type="submit" class="bg-gray-700 hover:bg-gray-800 justify-center text-white text-center font-bold my-5 py-3 px-4 rounded-full min-w-fit">Zapytaj</button></span>
+        
+            
+            <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
+                <h1 class="text-3xl text-center my-4">Zapytaj o grę</h1>
+                
+                <form method="post" class="flex flex-col justify-center bg-slate-200 mt-10 mx-64 rounded-md">
+                    {% csrf_token %}
+                    
+                        <span>{{similarity_form.description}}</span>
+                        <span><input type="hidden" name="form_type" value="similarity"></span>
+                        <span class="flex justify-center"><button type="submit" class="bg-gray-700 hover:bg-gray-800 justify-center text-white text-center font-bold my-5 py-3 px-4 rounded-full min-w-fit">Zapytaj</button></span>
+
+            </div>
+
+        {% endif %}
+    </div>
+    
+
+
+    <!--Renter Search-->
+    <div class="flex flex-col justify-center bg-slate-200 my-10 mx-64 rounded-md">
+        <h1 class="text-3xl text-center my-4">Wyszukaj Wypożyczającego</h1>
+        <form action="" method="post" class="flex flex-col justify-center bg-slate-200 mt-2 mx-64 rounded-md">
+            {% csrf_token %}
+            <div class="flex justify-between pb-4 " >
+                <span class="w-3/4"><input type="text" name="renter" id="renter" class="form-control rounded-lg py-3 px-48 w-full bg-gray-300" placeholder="Wyszukaj"></span>
+                <span><input type="hidden" name="form_type" value="renter_search" ></span>
+                <span><button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-3 px-4 rounded-full">Wyszukaj</button></span>
+            </div>
+        
+                
+        </form>
+
 
     </div>
 
-    {% endif %}
-    
 
-
-
-
+    <!-- Summary button -->
     <div class="flex flex-col justify-center bg-slate-200 my-4 mx-72">
         <h1 class="text-3xl text-center my-4">Podsumowanie</h1>
         <div class="flex justify-center">
@@ -136,7 +167,7 @@
     </div>
     
     
-    
+    <!-- Add game button -->
     <div class="fixed bottom-[80px] right-3 mb-4 mr-4">
         <a href="{% url 'games:add_game' event.id %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-full">
             Dodaj Grę

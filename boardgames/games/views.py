@@ -7,9 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from boardgamegeek import BGGClient
 from django.views.generic import TemplateView
-
+from django.conf import settings
 # Create your views here.
-LIMIT_OF_RENTED_GAMES = 2  # limit of games that can be rented by one user
+  # limit of games that can be rented by one user
 
 
 @login_required
@@ -56,14 +56,12 @@ def edit_game(request, game_id):
                 try:
                     can_be_rented = (
                         Renter.objects.get(barcode=renters_barcode).how_many_games
-                        >= LIMIT_OF_RENTED_GAMES
+                        >= settings.LIMIT_OF_RENTED_GAMES
                     )
                 except Renter.DoesNotExist:
                     can_be_rented = False
-                if (
-                    renters_barcode in list_of_renters.values_list("barcode", flat=True)
-                    or can_be_rented
-                ):
+                
+                if (renters_barcode in list_of_renters.values_list("barcode", flat=True) or can_be_rented):
                     messages.error(
                         request,
                         "Gra jest już wypożyczona lub osoba wypożyczająca ma już maksymalną ilość gier.",
@@ -89,15 +87,12 @@ def edit_game(request, game_id):
         elif "renter_id" in request.POST:  # Removing renter
             renter_id = request.POST.get("renter_id", None)
             renter = game.list_of_renters.get(id=renter_id)
-            renter.how_many_games -= 1
-            renter.save()
-            game.list_of_renters.remove(renter)
-            game.accessible += 1
-            game.save()
             rating = RatingForm(request.POST)
+            rating_value = 0
             if rating.is_valid() and int(rating.cleaned_data["rating"]) > 0:
-                rating = rating.cleaned_data["rating"]
-                game.add_rating(rating)
+                rating_value = rating.cleaned_data["rating"]
+            game.remove_renter(renter_id, rating_value)
+                
             messages.success(request, "Gra została zwrócona.")
             return redirect("core:event_detail", game.event.id)
 
