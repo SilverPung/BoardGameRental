@@ -8,11 +8,12 @@
         <div class="flex flex-col items-center border-t-2 border-gray-700">
             <!-- Checkbox form for filtering top games -->
             <form method="get" action="">
-                <label class=" mt-3 block">
-                    <input type="checkbox" name="top" value="true" class="mr-2"
-                        {% if top == 'true' %}checked{% endif %}>
+                <label class=" mt-3 flex flex-col items-center">        
                     Top
+                    <input type="checkbox" name="top" value="true" class="mt-1 w-1/2 rounded-lg"
+                        {% if top == 'true' %}checked{% endif %}>         
                 </label>
+                
                 <label class=" mt-3 block">
                     Min graczy
                     <input type="number" name="min_players" min="0" class="mt-1 w-1/2 rounded-lg"
@@ -32,6 +33,11 @@
                     Max czas
                     <input type="number" name="max_playtime" min="0" step="5" class="mt-1 w-1/2 rounded-lg"
                     {% if max_playtime %}value={{max_playtime}} {% endif %}>
+                </label>
+                <label class=" mt-3 flex flex-col items-center">
+                    Gry bez określonych parametrów
+                    <input type="checkbox" name="nulldata" value="true" class="mt-1 w-1/2 rounded-lg"
+                        {% if nulldata == 'true' %}checked{% endif %}> 
                 </label>
 
                 <button type="submit" class="bg-gray-700 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded-full mt-4">
@@ -91,6 +97,9 @@
         <div>
             {% if top %}
                 <input type="hidden" name="top" value="{{ top }}">
+            {% endif %}
+            {% if nulldata %}
+                <input type="hidden" name="nulldata" value="{{ nulldata }}">
             {% endif %}
             {% if min_players %}
                 <input type="hidden" name="min_players" value="{{ min_players }}">

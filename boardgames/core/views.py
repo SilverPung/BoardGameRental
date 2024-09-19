@@ -36,6 +36,7 @@ def event_detail(request, event_id):
     min_playtime = request.GET.get('min_playtime')
     max_playtime = request.GET.get('max_playtime')
     iterator = int(request.GET.get('iterator', 0)) 
+    nulldata=request.GET.get('nulldata')
     reset = request.GET.get('reset')
     context = {}
 
@@ -61,13 +62,13 @@ def event_detail(request, event_id):
         if top == 'true':
             games=games.filter(top=True)
         if min_players:
-            games=games.filter(Q(max_players__gte=int(min_players) )| Q(max_players__isnull=True))
+            games=games.filter(Q(max_players__gte=int(min_players) )| Q(max_players__isnull=bool(nulldata)))
         if max_players:
-            games=games.filter(Q(min_players__lte=int(max_players)) | Q(min_players__isnull=True))
+            games=games.filter(Q(min_players__lte=int(max_players)) | Q(min_players__isnull=bool(nulldata)))
         if min_playtime:
-            games=games.filter(Q(min_playtime__gte=int(min_playtime)) | Q(max_playtime__isnull=True))
+            games=games.filter(Q(min_playtime__gte=int(min_playtime)) | Q(max_playtime__isnull=bool(nulldata)))
         if max_playtime:
-            games=games.filter(Q(max_playtime__lte=int(max_playtime)) | Q(min_playtime__isnull=True))
+            games=games.filter(Q(max_playtime__lte=int(max_playtime)) | Q(min_playtime__isnull=bool(nulldata)))
     
     
 
@@ -125,7 +126,7 @@ def event_detail(request, event_id):
     context.update({'event': event, 'form': form, 'top_games': top_games, 'iterator': iterator, 
              'max_iterator': max_iterator, 'similarity_form': similarityform, 'beta': settings.BETA, 
              'min_players': min_players, 'max_players': max_players, 'min_playtime': min_playtime, 
-             'max_playtime': max_playtime, 'top': top})
+             'max_playtime': max_playtime, 'top': top,'nulldata':nulldata})
     return render(request, 'core/event_detail.html', context=context)
 
 @login_required
