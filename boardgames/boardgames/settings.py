@@ -86,13 +86,13 @@ WSGI_APPLICATION = 'boardgames.wsgi.application'
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "boardgames",  # Set to your database name",
-        "USER": "boardgame",
-        "PASSWORD": "postgres",
-        "HOST": "localhost",  # Set to your database host
-        "PORT": "5432",       # Set to your database port
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),  # This should be 'db', not '127.0.0.1'
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 

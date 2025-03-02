@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+
+    environment:
+      POSTGRES_DB: boardgames
+      POSTGRES_USER: boardgame
+      POSTGRES_PASSWORD: postgres
+
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn boardgames.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_NAME: boardgames
+      DB_USER: boardgame
+      DB_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
